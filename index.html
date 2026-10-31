@@ -716,6 +716,15 @@ a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;paddin
 .ghead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}
 .ghead b{flex:1;min-width:0;font-size:14px}
 #gFrame{flex:1;width:100%;border:0}
+/* Photo viewer: tap a place photo to see it big; pinch / double-tap to zoom */
+.thumb.loaded,.pthumb.loaded{cursor:zoom-in}
+#photoBox{position:fixed;inset:0;z-index:2000;background:rgba(10,16,14,.98);display:flex;flex-direction:column}
+#photoBox[hidden]{display:none}
+#photoStage{flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;touch-action:none}
+#photoImg{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;user-select:none;-webkit-user-drag:none;cursor:zoom-in}
+#photoClose{position:absolute;top:12px;right:12px;width:46px;height:46px;border-radius:50%;padding:0;font-size:22px;background:rgba(255,255,255,.92);color:var(--ink);z-index:1}
+#photoCap{color:#e8eee9;text-align:center;padding:10px 60px 14px;font-size:14px}
+#photoCap .small{color:#a9b6b0}
 body.gopen{padding-right:50vw}
 body.gopen header{padding-left:20px;padding-right:20px}
 body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-columns:1fr}
@@ -809,7 +818,12 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  <div class="ghead"><b id="gTitle">Google directions</b><a id="gOpen" class="btnlink" target="_blank" rel="noopener" href="#">Open in Google Maps ↗</a><button onclick="closeGooglePanel()" aria-label="Close Google directions">✕ Close</button></div>
  <iframe id="gFrame" title="Google Maps directions" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </aside>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 1.8<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<div id="photoBox" hidden role="dialog" aria-modal="true" aria-label="Photo">
+ <button id="photoClose" onclick="closePhoto()" aria-label="Close photo">✕</button>
+ <div id="photoStage"><img id="photoImg" alt=""></div>
+ <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom · Photo: Wikipedia / Wikimedia Commons</span></div>
+</div>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 1.9<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -876,11 +890,74 @@ function applyPhotos(root){
   photoFor(p).then(src=>{
    if(!src)return;
    const img=new Image();
-   img.onload=()=>{el.style.backgroundImage=`url("${src}")`;el.classList.add('loaded');};
+   img.onload=()=>{
+    el.style.backgroundImage=`url("${src}")`;el.classList.add('loaded');
+    // Bound on the element itself: Leaflet popups stop clicks from reaching the document
+    el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label','View photo of '+p.name);
+    el.onclick=()=>openPhoto(p,src);
+    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPhoto(p,src);}};
+   };
    img.src=src;
   });
  });
 }
+
+/* ---------- Photo viewer ---------- */
+let pz={s:1,x:0,y:0},pointers=new Map(),pinch=null,lastTap=0,gesture=null;
+function setZoom(s,x,y){
+ const img=document.getElementById('photoImg');
+ pz.s=Math.min(5,Math.max(1,s));
+ if(pz.s===1){x=0;y=0;}
+ // keep the picture from being dragged completely off screen
+ const lim=(pz.s-1)/2,w=img.clientWidth*lim,h=img.clientHeight*lim;
+ pz.x=Math.min(w,Math.max(-w,x));pz.y=Math.min(h,Math.max(-h,y));
+ img.style.transform=`translate(${pz.x}px,${pz.y}px) scale(${pz.s})`;
+ img.style.cursor=pz.s>1?'grab':'zoom-in';
+}
+function openPhoto(p,src){
+ const img=document.getElementById('photoImg');
+ // Wikimedia serves standard sizes; ask for 1280px wide, fall back to the small photo if that fails
+ const big=src.replace(/\/\d+px-([^/?]+)/,'/1280px-$1');
+ img.onerror=()=>{img.onerror=null;img.src=src;};
+ img.src=big;img.alt=p.name;
+ document.getElementById('photoName').textContent=p.name;
+ pointers.clear();pinch=null;setZoom(1,0,0);
+ document.getElementById('photoBox').hidden=false;document.body.style.overflow='hidden';
+ document.getElementById('photoClose').focus();
+}
+function closePhoto(){
+ document.getElementById('photoBox').hidden=true;document.getElementById('photoImg').removeAttribute('src');
+ document.body.style.overflow='';
+}
+(function(){
+ const stage=document.getElementById('photoStage');
+ stage.addEventListener('pointerdown',e=>{
+  stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pointers.size===1)gesture={x:e.clientX,y:e.clientY,t:Date.now(),moved:false,multi:false};
+  if(pointers.size===2){if(gesture)gesture.multi=true;const [a,b]=[...pointers.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:pz.s};}
+ });
+ stage.addEventListener('pointermove',e=>{
+  if(!pointers.has(e.pointerId))return;
+  const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(gesture&&Math.hypot(e.clientX-gesture.x,e.clientY-gesture.y)>10)gesture.moved=true;
+  if(pointers.size===2&&pinch){const [a,b]=[...pointers.values()];setZoom(pinch.s*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d,pz.x,pz.y);}
+  else if(pointers.size===1&&pz.s>1)setZoom(pz.s,pz.x+e.clientX-prev.x,pz.y+e.clientY-prev.y);
+ });
+ const up=e=>{
+  const p=pointers.get(e.pointerId);pointers.delete(e.pointerId);
+  if(pointers.size<2)pinch=null;
+  if(e.type!=='pointerup'||!p||pointers.size)return;
+  // only a short tap that didn't move and wasn't a pinch counts as a tap
+  const g=gesture;gesture=null;
+  if(!g||g.moved||g.multi||Date.now()-g.t>350){lastTap=0;return;}
+  const now=Date.now();
+  if(now-lastTap<300){setZoom(pz.s>1?1:2.5,0,0);lastTap=0;}  // double-tap / double-click toggles zoom
+  else{lastTap=now;if(e.target===stage&&pz.s===1)setTimeout(()=>{if(lastTap===now)closePhoto();},300);} // tap the dark background to close
+ };
+ stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+ stage.addEventListener('wheel',e=>{e.preventDefault();setZoom(pz.s*(e.deltaY<0?1.15:1/1.15),pz.x,pz.y);},{passive:false});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('photoBox').hidden){e.stopImmediatePropagation();closePhoto();}});  // close only the photo, not the Google panel under it
+})();
 
 /* ---------- Map ---------- */
 let map=null,markers={},start=home,startName='Apartment',routeLayers=[];
