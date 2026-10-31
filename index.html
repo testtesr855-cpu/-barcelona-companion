@@ -716,6 +716,10 @@ a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;paddin
 .ghead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}
 .ghead b{flex:1;min-width:0;font-size:14px}
 #gFrame{flex:1;width:100%;border:0}
+.shopgrid{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+.shopgrid .stop:last-child{border-bottom:1px solid var(--line)}
+.shopPin{display:flex;align-items:center;justify-content:center;font-size:16px;background:#fff;border:2px solid var(--green);border-radius:50%;box-shadow:0 1px 4px #0004}
+@media(max-width:800px){.shopgrid{grid-template-columns:1fr}}
 /* Photo viewer: tap a place photo to see it big; pinch / double-tap to zoom */
 .thumb.loaded,.pthumb.loaded{cursor:zoom-in}
 #photoBox{position:fixed;inset:0;z-index:2000;background:rgba(10,16,14,.98);display:flex;flex-direction:column}
@@ -783,6 +787,12 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
   <div id="dayContent"></div>
  </section>
 
+ <section class="panel" style="margin-top:16px">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap"><h2>Food shops near the apartment</h2><button class="secondary" onclick="focusShops()">Show shops on map</button></div>
+  <p class="small" style="margin:0">Most shops close on Sunday; the corner shop stays open. Opening hours come from OpenStreetMap, so check Google before you go. Tap “Photos & reviews” for current ratings.</p>
+  <div id="shopList" class="shopgrid"></div>
+ </section>
+
  <div class="columns">
   <section class="panel">
    <h2>Your local companion</h2>
@@ -823,7 +833,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  <div id="photoStage"><img id="photoImg" alt=""></div>
  <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom · Photo: Wikipedia / Wikimedia Commons</span></div>
 </div>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 1.9<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.0<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -853,6 +863,11 @@ const places=[
 {id:'mnac',name:'MNAC terrace',lat:41.3684,lon:2.1537,desc:'Free terrace viewpoint over Plaça d’Espanya.',icon:'🖼️',wiki:["Museu_Nacional_d'Art_de_Catalunya"]},
 {id:'portvell',name:'Port Vell · sailing departure area',lat:41.3767,lon:2.1850,desc:'Check the exact meeting pier on your sailing confirmation.',icon:'⛵',wiki:['Port_Vell']},
 {id:'picasso',name:'Picasso Museum',lat:41.3852,lon:2.1809,desc:'In El Born. Free on Thursdays after 17:00 with a booked slot (otherwise €14).',icon:'🎨',wiki:['Museu_Picasso']},
+{id:'shop24',shop:true,name:'Supermercat · corner shop',lat:41.39348,lon:2.15700,desc:'Small grocery right by the apartment. Open every day 7:30–midnight, including Sundays.',icon:'🏪',wiki:[],gurl:'https://www.google.com/maps/search/supermercat/@41.39348,2.15700,19z'},
+{id:'caprabo',shop:true,name:'Caprabo · Còrsega 299',lat:41.39495,lon:2.15708,desc:'Full supermarket about 140 m from the apartment. Check opening hours on Google.',icon:'🛒',wiki:[],gq:'Caprabo, Carrer de Còrsega 299, Barcelona'},
+{id:'bonpreu',shop:true,name:'Bonpreu · Provença 185',lat:41.39113,lon:2.15655,desc:'Large Catalan supermarket about 300 m west. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Bonpreu, Carrer de Provença 185, Barcelona'},
+{id:'mercadona',shop:true,name:'Mercadona · Mallorca 135',lat:41.38813,lon:2.15423,desc:'Spain’s big low-price supermarket, good for basics, about 670 m. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Mercadona, Carrer de Mallorca 135, Barcelona'},
+{id:'concepcio',shop:true,name:'Mercat de la Concepció',lat:41.39588,lon:2.16864,desc:'Covered local market for fruit, fish, meat and flowers, about 1 km east. Mon & Sat 8:00–15:00, Tue–Fri 8:00–20:00, closed Sunday.',icon:'🥖',wiki:['ca:Mercat_de_la_Concepció'],gq:'Mercat de la Concepció, Barcelona'},
 {id:'girona',name:'Girona · optional day trip',lat:41.9794,lon:2.8214,desc:'Optional full-day tour on Friday, only if the group wants another trip.',icon:'🏘️',wiki:['Girona']}
 ];
 const days=[
@@ -875,7 +890,8 @@ async function photoFor(p){
  if(photoCache[p.id]!==undefined)return photoCache[p.id];
  for(const t of (p.wiki||[])){
   try{
-   const r=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(t));
+   const [lang,title]=t.includes(':')&&t.indexOf(':')===2?[t.slice(0,2),t.slice(3)]:['en',t]; // e.g. 'ca:Title' = Catalan Wikipedia
+   const r=await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/`+encodeURIComponent(title));
    if(!r.ok)continue;
    const j=await r.json();
    const src=(j.thumbnail&&j.thumbnail.source)||(j.originalimage&&j.originalimage.source);
@@ -961,8 +977,11 @@ function closePhoto(){
 
 /* ---------- Map ---------- */
 let map=null,markers={},start=home,startName='Apartment',routeLayers=[];
+// Google Maps page for a shop: shows its current rating, reviews and photos (no API key needed)
+function reviewsUrl(p){return p.gurl||`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.gq)}`;}
+function reviewsLink(p,style){return p.shop?`<a class="btnlink" style="${style||''}" target="_blank" rel="noopener" href="${reviewsUrl(p)}">⭐ Photos & reviews on Google ↗</a>`:'';}
 function popupHtml(p){
- return `<div class="pthumb" data-photo="${p.id}"></div><b>${p.name}</b><br>${p.desc}<br><button style="margin-top:6px;padding:6px 9px;font-size:12px" onclick="selectPlace('${p.id}');directions('transit')">Route here</button>`;
+ return `<div class="pthumb" data-photo="${p.id}"></div><b>${p.name}</b><br>${p.desc}<br><button style="margin-top:6px;padding:6px 9px;font-size:12px" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">Route here</button>${p.shop?'<br>'+reviewsLink(p,'margin-top:6px;padding:6px 9px;font-size:12px'):''}`;
 }
 function initMap(){
  if(typeof L==='undefined'){
@@ -974,7 +993,8 @@ function initMap(){
  // OpenStreetMap tiles: free, no API key (CARTO tiles now show an "API key required" watermark)
  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
  places.forEach(p=>{
-  const m=L.marker([p.lat,p.lon]).addTo(map).bindPopup(popupHtml(p),{maxWidth:240});
+  const icon=p.shop?L.divIcon({className:'shopPin',html:p.icon,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-14]}):undefined;
+  const m=L.marker([p.lat,p.lon],icon?{icon}:{}).addTo(map).bindPopup(popupHtml(p),{maxWidth:240});
   m.on('popupopen',e=>applyPhotos(e.popup.getElement()));
   markers[p.id]=m;
  });
@@ -1165,7 +1185,7 @@ async function directions(mode){
 /* ---------- Day plans ---------- */
 function stopCard(id){
  const p=places.find(x=>x.id===id);if(!p)return '';
- return `<div class="stop"><div class="thumb" data-photo="${p.id}"><span>${p.icon}</span></div><div><h3>${p.name}</h3><p>${p.desc}</p><div class="actions"><button class="secondary" onclick="selectPlace('${p.id}')">On map</button><button class="secondary" onclick="selectPlace('${p.id}');directions('transit')">Directions</button></div></div></div>`;
+ return `<div class="stop"><div class="thumb" data-photo="${p.id}"><span>${p.icon}</span></div><div><h3>${p.name}</h3><p>${p.desc}</p><div class="actions"><button class="secondary" onclick="selectPlace('${p.id}')">On map</button><button class="secondary" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">Directions</button>${reviewsLink(p)}</div></div></div>`;
 }
 function renderDays(){const tabs=document.getElementById('dayTabs');tabs.innerHTML=days.map((d,i)=>`<button class="${i===0?'active':''}" onclick="showDay(${i},this)">${d.key.slice(0,3)} ${d.date.split(' ')[1]}</button>`).join('');showDay(0,tabs.children[0]);}
 function showDay(i,btn){
@@ -1201,6 +1221,8 @@ return 'I can help with the places in your plan: Sagrada Família, Park Güell, 
 function ask(q){addMsg(q,'you');addMsg(guideAnswer(q),'bot');}
 function sendQuestion(){const e=document.getElementById('question'),q=e.value.trim();if(q){ask(q);e.value='';}}
 
-initMap();renderDays();renderTasks();
+function renderShops(){const box=document.getElementById('shopList');box.innerHTML=places.filter(p=>p.shop).map(p=>stopCard(p.id)).join('');applyPhotos(box);}
+function focusShops(){if(!map)return;const ps=places.filter(p=>p.shop||p.id==='home');map.fitBounds(L.latLngBounds(ps.map(p=>[p.lat,p.lon])).pad(.2));document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});}
+initMap();renderDays();renderShops();renderTasks();
 </script>
 </body></html>
