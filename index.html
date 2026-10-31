@@ -709,7 +709,7 @@ button:focus,input:focus,select:focus{outline:3px solid #d9a85b88}
 a.btnlink{display:inline-block;border-radius:11px;background:#edf1ed;color:var(--green);font-weight:650;text-decoration:none;padding:8px 11px;font-size:12px}
 footer{padding:26px 20px 40px;text-align:center;color:var(--muted);font-size:11px}
 a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;padding:11px 13px;border-radius:12px;font-size:12px;color:#6b522d;margin-top:12px}
-@media(max-width:800px){.topgrid,.columns,.daygrid{grid-template-columns:1fr}.shell{padding:13px}#map{height:340px}#gFrame{height:340px!important}.panel{padding:14px}}
+@media(max-width:800px){.topgrid,.columns,.daygrid{grid-template-columns:1fr}.shell{padding:13px}#map{height:340px}.panel{padding:14px}}
 </style>
 </head>
 <body>
@@ -744,8 +744,7 @@ a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;paddin
   <section class="panel">
    <h2>Explore the map</h2>
    <div id="map" aria-label="Interactive map of Barcelona destinations"></div>
-   <div id="gWrap" style="display:none"><iframe id="gFrame" title="Google directions" style="width:100%;height:430px;border:0;border-radius:14px" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><button class="secondary" style="margin-top:8px;font-size:12px;padding:8px 10px" onclick="showOurMap()">← Back to our map</button></div>
-   <p class="small" style="margin:9px 0 0">Tap a pin for a photo and a route button. Routes are drawn right here; if one can’t be drawn, Google’s directions open in this same panel.</p>
+   <p class="small" style="margin:9px 0 0">Tap a pin for a photo and a route button. Routes are drawn right here, with an “Open in Google Maps” button for turn-by-turn navigation.</p>
    <div id="routeResults" class="routebox" style="display:none;margin-top:10px">
     <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
      <b id="routeTitle">Your route</b>
@@ -796,7 +795,7 @@ a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;paddin
  </div>
  <div class="warning"><b>Travel-smart note:</b> Transit lines, fares, opening hours and live arrivals can change. Check TMB or Google Maps on the day. Keep phones secure in crowded areas, especially La Rambla and busy metro stations.</div>
 </main>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 1.6<br>Map data © OpenStreetMap contributors © CARTO · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 1.7<br>Map data © OpenStreetMap contributors © CARTO · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -995,23 +994,6 @@ function renderRouteChoices(data,mode){
   if(i===0)drawLegs(legs,mode);
  });
 }
-/* In-panel Google view: shows Google's directions INSIDE the Explorer panel (no new tab) */
-function googleEmbedUrl(mode,p){
- const flag={transit:'r',walking:'w',driving:'d'}[mode]||'r';
- return `https://maps.google.com/maps?saddr=${start[0]},${start[1]}&daddr=${p.lat},${p.lon}&dirflg=${flag}&hl=en&output=embed`;
-}
-function showGoogleView(mode,p){
- document.getElementById('map').style.display='none';
- const w=document.getElementById('gWrap');w.style.display='block';
- document.getElementById('gFrame').src=googleEmbedUrl(mode,p);
- document.getElementById('gWrap').scrollIntoView({behavior:'smooth',block:'center'});
-}
-function showOurMap(){
- document.getElementById('gWrap').style.display='none';
- document.getElementById('gFrame').src='about:blank';
- document.getElementById('map').style.display='block';
- if(map)setTimeout(()=>map.invalidateSize(),50);
-}
 /* Walking / taxi: OpenStreetMap routing (FOSSGIS servers), drawn on our map with turn-by-turn steps */
 function stepText(s){
  const m=s.maneuver||{},road=s.name?` onto ${s.name}`:'';
@@ -1051,26 +1033,22 @@ async function transitRoute(p){
 }
 async function directions(mode){
  const p=places.find(x=>x.id===document.getElementById('destination').value);if(!p)return;
- clearRoute();showOurMap();window.currentDest=p.name;
+ clearRoute();window.currentDest=p.name;
  const labels={transit:'Public transport',walking:'Walking',driving:'Taxi / car'};
  document.getElementById('routeResults').style.display='block';
  document.getElementById('routeTitle').textContent=`${labels[mode]} · ${p.name}`;
  document.getElementById('routeSubtitle').textContent=`From ${startName} · Calculating route…`;
  document.getElementById('routeOptions').textContent='Finding the best route…';
- const gbtn=document.createElement('button');gbtn.className='secondary';gbtn.style.cssText='padding:7px 10px;font-size:12px';
- gbtn.textContent='Show Google directions here';gbtn.onclick=()=>showGoogleView(mode,p);
- const backup=document.getElementById('routeBackup');backup.innerHTML='';backup.appendChild(gbtn);
- backup.insertAdjacentHTML('beforeend',` <a class="small" target="_blank" rel="noopener" href="${gmapsUrl(mode,p)}" style="margin-left:6px">or open the Google Maps app ↗</a>`);
+ // Standard Google Maps directions link: opens the Google Maps app on phones, no API key needed
+ document.getElementById('routeBackup').innerHTML=`<a class="btnlink" target="_blank" rel="noopener" href="${gmapsUrl(mode,p)}">Open in Google Maps ↗</a>`;
  document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});
- if(!map){showGoogleView(mode,p);document.getElementById('routeOptions').textContent='Showing Google directions in the map panel.';return;}
+ if(!map){document.getElementById('routeOptions').textContent='The map could not load. Use “Open in Google Maps” below.';return;}
  try{
   if(mode==='transit')await transitRoute(p);else await streetRoute(mode,p);
   document.getElementById('routeSubtitle').textContent=`From ${startName} · Route drawn on the map`;
  }catch(err){
-  // Couldn't draw it ourselves: show Google's directions inside the same panel instead
-  showGoogleView(mode,p);
-  document.getElementById('routeSubtitle').textContent=`From ${startName} · Showing Google directions in the map panel`;
-  document.getElementById('routeOptions').innerHTML=`<span class="small">Our route service couldn't plan this trip (${err.message}), so Google's directions are shown above instead.</span>`;
+  document.getElementById('routeSubtitle').textContent=`From ${startName} · No route drawn`;
+  document.getElementById('routeOptions').innerHTML=`<span class="small">Our route service couldn't plan this trip (${err.message}). Tap “Open in Google Maps” below for directions.</span>`;
  }
 }
 
