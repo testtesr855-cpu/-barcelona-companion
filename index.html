@@ -718,6 +718,9 @@ a{color:var(--green)}.warning{background:#fff6e8;border:1px solid #f0dfc3;paddin
 #gFrame{flex:1;width:100%;border:0}
 .shopgrid{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
 .shopgrid .stop:last-child{border-bottom:1px solid var(--line)}
+.homePin{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--gold);border:3px solid var(--green);border-radius:50%;box-shadow:0 2px 6px #0006}
+.leaflet-tooltip.homeLabel{background:var(--green);color:#fff;border:0;font-weight:700;font-size:12px;padding:3px 8px;border-radius:8px}
+.leaflet-tooltip.homeLabel::before{border-right-color:var(--green)}
 .shopPin{display:flex;align-items:center;justify-content:center;font-size:16px;background:#fff;border:2px solid var(--green);border-radius:50%;box-shadow:0 1px 4px #0004}
 @media(max-width:800px){.shopgrid{grid-template-columns:1fr}}
 /* Photo viewer: tap a place photo to see it big; pinch / double-tap to zoom */
@@ -833,7 +836,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  <div id="photoStage"><img id="photoImg" alt=""></div>
  <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom · Photo: Wikipedia / Wikimedia Commons</span></div>
 </div>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.0<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.1<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -843,10 +846,10 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 //# sourceMappingURL=leaflet.js.map
 </script>
 <script>
-const home=[41.3937,2.1574];
+const home=[41.39137,2.15724]; // Carrer de Provença 232 (OpenStreetMap address point)
 // wiki: Wikipedia article titles used to fetch a real photo of each place (first one that has a picture wins)
 const places=[
-{id:'home',name:'Bonavista apartment',lat:41.3937,lon:2.1574,desc:'Your Eixample home base.',icon:'🏠',wiki:['Eixample']},
+{id:'home',name:'Bonavista apartment',lat:41.39137,lon:2.15724,desc:'Your Eixample home base · Carrer de Provença 232.',icon:'🏠',wiki:['Eixample']},
 {id:'pedrera',name:'La Pedrera (Casa Milà)',lat:41.3954,lon:2.1619,desc:'Gaudí’s wavy stone building and rooftop chimneys. Two minutes from the apartment.',icon:'🏛️',wiki:['Casa_Milà']},
 {id:'batllo',name:'Casa Batlló',lat:41.3917,lon:2.1649,desc:'The dragon-roof house on Passeig de Gràcia.',icon:'🐉',wiki:['Casa_Batlló']},
 {id:'campnou',name:'Spotify Camp Nou',lat:41.3809,lon:2.1228,desc:'Match day: Barça vs Villarreal. Confirm the stadium and entry gate on your ticket.',icon:'⚽',wiki:['Camp_Nou']},
@@ -863,11 +866,11 @@ const places=[
 {id:'mnac',name:'MNAC terrace',lat:41.3684,lon:2.1537,desc:'Free terrace viewpoint over Plaça d’Espanya.',icon:'🖼️',wiki:["Museu_Nacional_d'Art_de_Catalunya"]},
 {id:'portvell',name:'Port Vell · sailing departure area',lat:41.3767,lon:2.1850,desc:'Check the exact meeting pier on your sailing confirmation.',icon:'⛵',wiki:['Port_Vell']},
 {id:'picasso',name:'Picasso Museum',lat:41.3852,lon:2.1809,desc:'In El Born. Free on Thursdays after 17:00 with a booked slot (otherwise €14).',icon:'🎨',wiki:['Museu_Picasso']},
-{id:'shop24',shop:true,name:'Supermercat · corner shop',lat:41.39348,lon:2.15700,desc:'Small grocery right by the apartment. Open every day 7:30–midnight, including Sundays.',icon:'🏪',wiki:[],gurl:'https://www.google.com/maps/search/supermercat/@41.39348,2.15700,19z'},
-{id:'caprabo',shop:true,name:'Caprabo · Còrsega 299',lat:41.39495,lon:2.15708,desc:'Full supermarket about 140 m from the apartment. Check opening hours on Google.',icon:'🛒',wiki:[],gq:'Caprabo, Carrer de Còrsega 299, Barcelona'},
-{id:'bonpreu',shop:true,name:'Bonpreu · Provença 185',lat:41.39113,lon:2.15655,desc:'Large Catalan supermarket about 300 m west. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Bonpreu, Carrer de Provença 185, Barcelona'},
-{id:'mercadona',shop:true,name:'Mercadona · Mallorca 135',lat:41.38813,lon:2.15423,desc:'Spain’s big low-price supermarket, good for basics, about 670 m. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Mercadona, Carrer de Mallorca 135, Barcelona'},
-{id:'concepcio',shop:true,name:'Mercat de la Concepció',lat:41.39588,lon:2.16864,desc:'Covered local market for fruit, fish, meat and flowers, about 1 km east. Mon & Sat 8:00–15:00, Tue–Fri 8:00–20:00, closed Sunday.',icon:'🥖',wiki:['ca:Mercat_de_la_Concepció'],gq:'Mercat de la Concepció, Barcelona'},
+{id:'shop24',shop:true,name:'Supermercat · corner shop',lat:41.39348,lon:2.15700,desc:'Small grocery about 250 m north, near Rosselló. Open every day 7:30–midnight, including Sundays.',icon:'🏪',wiki:[],gurl:'https://www.google.com/maps/search/supermercat/@41.39348,2.15700,19z'},
+{id:'caprabo',shop:true,name:'Caprabo · Còrsega 299',lat:41.39495,lon:2.15708,desc:'Full supermarket about 400 m north. Check opening hours on Google.',icon:'🛒',wiki:[],gq:'Caprabo, Carrer de Còrsega 299, Barcelona'},
+{id:'bonpreu',shop:true,name:'Bonpreu · Provença 185',lat:41.39113,lon:2.15655,desc:'Large Catalan supermarket about 60 m along Provença, almost next door. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Bonpreu, Carrer de Provença 185, Barcelona'},
+{id:'mercadona',shop:true,name:'Mercadona · Mallorca 135',lat:41.38813,lon:2.15423,desc:'Spain’s big low-price supermarket, good for basics, about 450 m. Mon–Sat 9:00–21:00, closed Sunday.',icon:'🛒',wiki:[],gq:'Mercadona, Carrer de Mallorca 135, Barcelona'},
+{id:'concepcio',shop:true,name:'Mercat de la Concepció',lat:41.39588,lon:2.16864,desc:'Covered local market for fruit, fish, meat and flowers, about 1.1 km east. Mon & Sat 8:00–15:00, Tue–Fri 8:00–20:00, closed Sunday.',icon:'🥖',wiki:['ca:Mercat_de_la_Concepció'],gq:'Mercat de la Concepció, Barcelona'},
 {id:'girona',name:'Girona · optional day trip',lat:41.9794,lon:2.8214,desc:'Optional full-day tour on Friday, only if the group wants another trip.',icon:'🏘️',wiki:['Girona']}
 ];
 const days=[
@@ -993,8 +996,10 @@ function initMap(){
  // OpenStreetMap tiles: free, no API key (CARTO tiles now show an "API key required" watermark)
  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
  places.forEach(p=>{
-  const icon=p.shop?L.divIcon({className:'shopPin',html:p.icon,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-14]}):undefined;
-  const m=L.marker([p.lat,p.lon],icon?{icon}:{}).addTo(map).bindPopup(popupHtml(p),{maxWidth:240});
+  const icon=p.shop?L.divIcon({className:'shopPin',html:p.icon,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-14]})
+   :p.id==='home'?L.divIcon({className:'homePin',html:'🏠',iconSize:[40,40],iconAnchor:[20,20],popupAnchor:[0,-18]}):undefined;
+  const m=L.marker([p.lat,p.lon],icon?{icon,zIndexOffset:p.id==='home'?1000:0}:{}).addTo(map).bindPopup(popupHtml(p),{maxWidth:240});
+  if(p.id==='home')m.bindTooltip('Your apartment',{permanent:true,direction:'right',offset:[18,0],className:'homeLabel'});
   m.on('popupopen',e=>applyPhotos(e.popup.getElement()));
   markers[p.id]=m;
  });
