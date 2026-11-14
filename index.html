@@ -741,6 +741,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 #zMap{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:14px;cursor:zoom-in}
 .zsteps,.ztips{margin:6px 0 0;padding-left:20px;font-size:13px}.zsteps li,.ztips li{margin:5px 0}
 @media(max-width:800px){.zgrid{grid-template-columns:1fr}}
+#zTerminal{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:14px;cursor:zoom-in;background:#fff}
 </style>
 </head>
 <body>
@@ -855,6 +856,13 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
     </div>
    </div>
   </div>
+  <h3 style="margin:18px 0 6px">Real terminal map</h3>
+  <p class="small" style="margin:0 0 8px">Official terminal plan (via Lufthansa). Tap to zoom. Saved on your phone after your first visit, so it works offline.</p>
+  <img id="zTerminal" src="zurich-terminal-map.png" alt="Zurich Airport terminal plan" role="button" tabindex="0" onclick="openTerminalMap()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTerminalMap();}">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+   <a class="btnlink" href="zurich-terminal-map.pdf" target="_blank" rel="noopener">Open full map (PDF)</a>
+   <a class="btnlink" href="https://www.flughafen-zuerich.ch/en/passengers/practical/guidance/interactive-map" target="_blank" rel="noopener">Zurich interactive map (online only) ↗</a>
+  </div>
  </section>
 
  <section class="panel" style="margin-top:16px">
@@ -915,7 +923,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  <div id="photoStage"><img id="photoImg" alt=""></div>
  <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom<span id="photoCredit"> · Photo: Wikipedia / Wikimedia Commons</span></span></div>
 </div>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.5<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.6<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -1031,6 +1039,9 @@ function openZurichMap(){
  const svg=new XMLSerializer().serializeToString(el);
  openPhoto({name:'Zurich Connection: Dock E to Gate A/B',noCredit:true},'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg));
 }
+function openTerminalMap(){openPhoto({name:'Zurich Airport terminal plan',noCredit:true},'zurich-terminal-map.png');}
+// Save the page, terminal map and PDF on the phone for offline use (needs the https:// GitHub Pages address)
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 function closePhoto(){
  document.getElementById('photoBox').hidden=true;document.getElementById('photoImg').removeAttribute('src');
  document.body.style.overflow='';
