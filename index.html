@@ -736,6 +736,11 @@ body.gopen{padding-right:50vw}
 body.gopen header{padding-left:20px;padding-right:20px}
 body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-columns:1fr}
 @media(max-width:800px){#gPanel{width:100vw;border:0}body.gopen{padding-right:0;overflow:hidden}}
+/* Zurich Connection: hand-drawn route map (inline SVG, works offline); tap to open it in the zoom viewer */
+.zgrid{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:18px;align-items:start}
+#zMap{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:14px;cursor:zoom-in}
+.zsteps,.ztips{margin:6px 0 0;padding-left:20px;font-size:13px}.zsteps li,.ztips li{margin:5px 0}
+@media(max-width:800px){.zgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -743,6 +748,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  <div class="kicker">Your pocket local · 21–28 November 2026</div>
  <h1>Barcelona, like a local.</h1>
  <p>A map, a day-by-day plan and a practical companion for getting around — built around your Eixample apartment and your actual week.</p>
+ <a class="btnlink" href="#zurich" style="margin-top:14px">✈ Zurich Connection: changing planes</a>
 </header>
 <main class="shell">
  <div class="topgrid">
@@ -783,6 +789,73 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
    </div>
   </section>
  </div>
+
+ <section class="panel" id="zurich" style="margin-top:16px">
+  <div class="pill">CHANGING PLANES</div>
+  <h2 style="margin-top:8px">Zurich Connection</h2>
+  <p class="small" style="margin:0 0 10px">You land at Dock E and fly on to Barcelona from Gate A or B. Tap the map to zoom in. It's built into this page, so it works offline.</p>
+  <div class="zgrid">
+   <svg id="zMap" viewBox="0 0 360 520" role="button" tabindex="0" aria-label="Route map from Dock E to the Barcelona gate. Tap to zoom" onclick="openZurichMap()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZurichMap();}" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+    <rect width="360" height="520" fill="#f7f5ef"/>
+    <!-- route line -->
+    <path d="M180 92 V448" stroke="#d9a85b" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 12" fill="none"/>
+    <!-- Dock E -->
+    <rect x="70" y="22" width="220" height="70" rx="12" fill="#173b35"/>
+    <text x="180" y="52" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Dock E</text>
+    <text x="180" y="74" text-anchor="middle" fill="#c9d9d1" font-size="12">You land here</text>
+    <rect x="194" y="100" width="136" height="22" rx="4" fill="#f5c400"/>
+    <text x="262" y="115" text-anchor="middle" fill="#182522" font-size="11" font-weight="700">Transfer / All gates</text>
+    <!-- Runway with Skymetro underneath -->
+    <rect x="0" y="140" width="360" height="44" fill="#9aa39f"/>
+    <path d="M10 162 H350" stroke="#fff" stroke-width="3" stroke-dasharray="18 14"/>
+    <text x="350" y="155" text-anchor="end" fill="#fff" font-size="11" font-weight="700">RUNWAY</text>
+    <rect x="102" y="190" width="156" height="34" rx="17" fill="#dcebe4" stroke="#173b35" stroke-width="2"/>
+    <text x="180" y="212" text-anchor="middle" fill="#173b35" font-size="13" font-weight="700">Skymetro ~3 min</text>
+    <!-- Passport control -->
+    <rect x="80" y="256" width="200" height="44" rx="10" fill="#fff" stroke="#173b35" stroke-width="2"/>
+    <text x="180" y="276" text-anchor="middle" fill="#182522" font-size="14" font-weight="700">Passport control</text>
+    <text x="180" y="292" text-anchor="middle" fill="#687570" font-size="11">Schengen entry</text>
+    <!-- Security -->
+    <rect x="80" y="330" width="200" height="44" rx="10" fill="#fff" stroke="#173b35" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="180" y="350" text-anchor="middle" fill="#182522" font-size="14" font-weight="700">Security (maybe)</text>
+    <text x="180" y="366" text-anchor="middle" fill="#687570" font-size="11">Keep liquids handy</text>
+    <!-- Gates A / B -->
+    <rect x="30" y="410" width="135" height="70" rx="12" fill="#173b35"/>
+    <text x="97" y="444" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Gate A</text>
+    <text x="97" y="464" text-anchor="middle" fill="#c9d9d1" font-size="11">or</text>
+    <rect x="195" y="410" width="135" height="70" rx="12" fill="#173b35"/>
+    <text x="262" y="444" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Gate B</text>
+    <text x="262" y="464" text-anchor="middle" fill="#c9d9d1" font-size="11">to Barcelona</text>
+    <!-- step numbers -->
+    <g font-size="15" font-weight="800" text-anchor="middle" fill="#182522">
+     <circle cx="38" cy="57" r="15" fill="#d9a85b"/><text x="38" y="62">1</text>
+     <circle cx="78" cy="207" r="15" fill="#d9a85b"/><text x="78" y="212">2</text>
+     <circle cx="56" cy="278" r="15" fill="#d9a85b"/><text x="56" y="283">3</text>
+     <circle cx="56" cy="352" r="15" fill="#d9a85b"/><text x="56" y="357">4</text>
+     <circle cx="180" cy="445" r="15" fill="#d9a85b"/><text x="180" y="450">5</text>
+    </g>
+    <text x="180" y="508" text-anchor="middle" fill="#687570" font-size="10">Not to scale</text>
+   </svg>
+   <div>
+    <ol class="zsteps">
+     <li><b>Land at Dock E</b>: follow the yellow “Transfer” / “All gates” signs.</li>
+     <li><b>Skymetro</b>: the train runs under the runway (about 3 min).</li>
+     <li><b>Passport control</b>: your Schengen entry, the only one of the trip.</li>
+     <li><b>Possible security re-check</b>: keep liquids handy.</li>
+     <li><b>Gate A or B for Barcelona</b>: check the screens or the Swiss app.</li>
+    </ol>
+    <div class="routebox">
+     <b>Good to know</b>
+     <ul class="ztips">
+      <li>Bags are checked through to Barcelona. Don't exit, and ignore the “Exit” signs.</li>
+      <li>Allow 60–90 min for the connection.</li>
+      <li>Your gate is on the boarding pass, in the Swiss app, or on the screens after passport control.</li>
+      <li>Barcelona arrival counts as domestic: no customs, just collect your bags and go.</li>
+     </ul>
+    </div>
+   </div>
+  </div>
+ </section>
 
  <section class="panel" style="margin-top:16px">
   <h2>Your week, one day at a time</h2>
@@ -840,9 +913,9 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 <div id="photoBox" hidden role="dialog" aria-modal="true" aria-label="Photo">
  <button id="photoClose" onclick="closePhoto()" aria-label="Close photo">✕</button>
  <div id="photoStage"><img id="photoImg" alt=""></div>
- <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom · Photo: Wikipedia / Wikimedia Commons</span></div>
+ <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom<span id="photoCredit"> · Photo: Wikipedia / Wikimedia Commons</span></span></div>
 </div>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.4<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.5<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -946,9 +1019,17 @@ function openPhoto(p,src){
  img.onerror=()=>{img.onerror=null;img.src=src;};
  img.src=big;img.alt=p.name;
  document.getElementById('photoName').textContent=p.name;
+ document.getElementById('photoCredit').hidden=!!p.noCredit;
  pointers.clear();pinch=null;setZoom(1,0,0);
  document.getElementById('photoBox').hidden=false;document.body.style.overflow='hidden';
  document.getElementById('photoClose').focus();
+}
+// Opens the built-in Zurich SVG in the photo viewer (as a data URL, so no network needed)
+function openZurichMap(){
+ const el=document.getElementById('zMap').cloneNode(true);
+ el.setAttribute('width','720');el.setAttribute('height','1040'); // a viewBox-only SVG would show at a small default size
+ const svg=new XMLSerializer().serializeToString(el);
+ openPhoto({name:'Zurich Connection: Dock E to Gate A/B',noCredit:true},'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg));
 }
 function closePhoto(){
  document.getElementById('photoBox').hidden=true;document.getElementById('photoImg').removeAttribute('src');
