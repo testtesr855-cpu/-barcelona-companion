@@ -744,6 +744,11 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 .zsteps,.ztips{margin:6px 0 0;padding-left:20px;font-size:13px}.zsteps li,.ztips li{margin:5px 0}
 /* English / Español: every text comes as a lang="en" + lang="es" pair; only the chosen one shows */
 html[data-lang="en"] [lang="es"],html[data-lang="es"] [lang="en"]{display:none}
+/* Airport → Apartment card: the address in big text, to show the driver */
+.addrbox{background:var(--mint);border:2px solid var(--green);border-radius:14px;padding:12px 14px;margin:12px 0 0}
+.addrbig{font-size:clamp(18px,5.6vw,28px);white-space:nowrap;font-weight:800;line-height:1.25;color:var(--green);margin:4px 0}
+.zgrid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:800px){.zgrid2{grid-template-columns:1fr}}
 .langbar{display:flex;gap:4px;justify-content:flex-end;margin-bottom:10px}
 .langbar button{padding:6px 12px;font-size:13px;background:rgba(255,255,255,.18);color:inherit;border:1px solid rgba(255,255,255,.35)}
 .langbar button.active{background:#fff;color:var(--green)}
@@ -849,6 +854,37 @@ html[data-lang="en"] [lang="es"],html[data-lang="es"] [lang="en"]{display:none}
   </div>
  </section>
 
+ <section class="panel" id="arrival" style="margin-top:16px">
+  <div class="pill"><span lang="en">ARRIVING IN BARCELONA</span><span lang="es">LLEGADA A BARCELONA</span></div>
+  <h2 style="margin-top:8px"><span lang="en">Airport → Apartment</span><span lang="es">Aeropuerto → Apartamento</span></h2>
+  <p style="margin:0 0 4px"><b><span lang="en">Sat Nov 21 · Land 9:05 AM · Terminal 1</span><span lang="es">Sáb 21 nov · Aterrizaje 9:05 h · Terminal 1</span></b></p>
+  <p class="small" style="margin:0"><span lang="en">No passport control here (done in Zurich): bags and out.</span><span lang="es">Aquí no hay control de pasaportes (ya lo hiciste en Zúrich): recoges las maletas y sales.</span></p>
+  <div class="addrbox">
+   <div class="small"><span lang="en">Show this to the driver</span><span lang="es">Enséñale esto al conductor</span></div>
+   <div class="addrbig">Bonavista Apartments<br>Carrer de Provença 232<br>08036 Barcelona</div>
+   <div class="small"><span lang="en">On the corner of Carrer d’Enric Granados</span><span lang="es">En la esquina con Carrer d’Enric Granados</span></div>
+  </div>
+  <div class="zgrid2">
+   <div class="routebox">
+    <b><span lang="en">Terminal 1 → Bonavista Apartments</span><span lang="es">Terminal 1 → Bonavista Apartments</span></b>
+    <ul class="ztips">
+     <li><span lang="en">About 16 km · plan 30–40 min door to door.</span><span lang="es">Unos 16 km · calcula 30–40 min puerta a puerta.</span></li>
+     <li><span lang="en"><b>Official taxi (black &amp; yellow)</b>: <b>metered</b>, not a fixed price. Expect about €30–38 in total (€4.60 airport supplement included, no luggage fee). The taxi line is right outside Arrivals.</span><span lang="es"><b>Taxi oficial (negro y amarillo)</b>: <b>con taxímetro</b>, no es precio fijo. Cuenta con unos 30–38 € en total (incluye el suplemento de aeropuerto de 4,60 €, sin cargo por maletas). La fila de taxis está justo a la salida de Llegadas.</span></li>
+     <li><span lang="en"><b>Cabify / Bolt</b>: <b>fixed price</b>, shown in the app before you book. Pickup is in a separate app zone: follow the “VTC” signs.</span><span lang="es"><b>Cabify / Bolt</b>: <b>precio fijo</b>, que ves en la app antes de reservar. La recogida es en una zona aparte para apps: sigue los letreros “VTC”.</span></li>
+    </ul>
+   </div>
+   <div class="routebox">
+    <b><span lang="en">The plan</span><span lang="es">El plan</span></b>
+    <ol class="zsteps">
+     <li><span lang="en">While you wait for your bags, open Cabify and check the price.</span><span lang="es">Mientras esperas las maletas, abre Cabify y mira el precio.</span></li>
+     <li><span lang="en">If it's under about €35 and the car is less than 10 min away, book it.</span><span lang="es">Si cuesta menos de unos 35 € y el coche está a menos de 10 min, resérvalo.</span></li>
+     <li><span lang="en">Otherwise, walk out to the taxi line.</span><span lang="es">Si no, sal a la fila de taxis.</span></li>
+    </ol>
+    <p style="margin:8px 0 0"><b><span lang="en">Expected arrival at the apartment: about 10:15–10:45 AM.</span><span lang="es">Llegada prevista al apartamento: hacia las 10:15–10:45 h.</span></b></p>
+   </div>
+  </div>
+ </section>
+
  <section class="panel" style="margin-top:16px">
   <h2><span lang="en">Your week, one day at a time</span><span lang="es">Tu semana, día a día</span></h2>
   <div id="dayTabs"></div>
@@ -907,7 +943,7 @@ html[data-lang="en"] [lang="es"],html[data-lang="es"] [lang="en"]{display:none}
  <div id="photoStage"><img id="photoImg" alt=""></div>
  <div id="photoCap"><b id="photoName"></b><br><span class="small"><span lang="en">Pinch or double-tap to zoom</span><span lang="es">Pellizca o toca dos veces para ampliar</span><span id="photoCredit"> · <span lang="en">Photo</span><span lang="es">Foto</span>: Wikipedia / Wikimedia Commons</span></span></div>
 </div>
-<footer>Barcelona Local Companion · <span lang="en">Personal trip guide for Pete, his son and Esmeralda · Version 2.9</span><span lang="es">Guía de viaje personal para Pete, su hijo y Esmeralda · Versión 2.9</span><br><span lang="en">Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</span><span lang="es">Datos del mapa © colaboradores de OpenStreetMap · Fotos de Wikipedia / Wikimedia Commons · Rutas de servicios externos.</span></footer>
+<footer>Barcelona Local Companion · <span lang="en">Personal trip guide for Pete, his son and Esmeralda · Version 3.0</span><span lang="es">Guía de viaje personal para Pete, su hijo y Esmeralda · Versión 3.0</span><br><span lang="en">Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</span><span lang="es">Datos del mapa © colaboradores de OpenStreetMap · Fotos de Wikipedia / Wikimedia Commons · Rutas de servicios externos.</span></footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
