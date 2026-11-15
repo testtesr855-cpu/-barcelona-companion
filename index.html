@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#173b35">
@@ -736,82 +736,77 @@ body.gopen{padding-right:50vw}
 body.gopen header{padding-left:20px;padding-right:20px}
 body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-columns:1fr}
 @media(max-width:800px){#gPanel{width:100vw;border:0}body.gopen{padding-right:0;overflow:hidden}}
-/* Zurich Connection: Going / Return tabs, each with a gate map image (saved offline by sw.js); tap to open it in the zoom viewer */
+/* Zurich Connection: Going / Return tabs, each with an inline SVG gate map (bilingual labels, works offline); tap to open it in the zoom viewer */
 .ztabs{display:flex;gap:7px;overflow:auto;padding:2px 0 12px}
 .ztabs button{flex:1;white-space:normal;line-height:1.2;background:#e9ece7;color:#40514b}
 .ztabs button.active{background:var(--green);color:white}
 .zimg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:14px;cursor:zoom-in;background:#fff}
 .zsteps,.ztips{margin:6px 0 0;padding-left:20px;font-size:13px}.zsteps li,.ztips li{margin:5px 0}
-.zhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.zlang{display:flex;gap:4px}
-.zlang button{padding:6px 12px;font-size:13px;background:#e9ece7;color:#40514b}
-.zlang button.active{background:var(--green);color:white}
-#zurich[data-lang="en"] [lang="es"],#zurich[data-lang="es"] [lang="en"]{display:none}
+/* English / Español: every text comes as a lang="en" + lang="es" pair; only the chosen one shows */
+html[data-lang="en"] [lang="es"],html[data-lang="es"] [lang="en"]{display:none}
+.langbar{display:flex;gap:4px;justify-content:flex-end;margin-bottom:10px}
+.langbar button{padding:6px 12px;font-size:13px;background:rgba(255,255,255,.18);color:inherit;border:1px solid rgba(255,255,255,.35)}
+.langbar button.active{background:#fff;color:var(--green)}
 </style>
 </head>
 <body>
 <header>
- <div class="kicker">Your pocket local · 21–28 November 2026</div>
- <h1>Barcelona, like a local.</h1>
- <p>A map, a day-by-day plan and a practical companion for getting around — built around your Eixample apartment and your actual week.</p>
- <a class="btnlink" href="#zurich" style="margin-top:14px">✈ Zurich Connection: changing planes</a>
+ <div class="langbar" role="group" aria-label="Language / Idioma"><button data-lang="en" class="active" aria-pressed="true" onclick="setLang('en')">English</button><button data-lang="es" aria-pressed="false" onclick="setLang('es')">Español</button></div>
+ <div class="kicker"><span lang="en">Your pocket local · 21–28 November 2026</span><span lang="es">Tu guía local de bolsillo · 21–28 de noviembre de 2026</span></div>
+ <h1><span lang="en">Barcelona, like a local.</span><span lang="es">Barcelona, como un local.</span></h1>
+ <p><span lang="en">A map, a day-by-day plan and a practical companion for getting around — built around your Eixample apartment and your actual week.</span><span lang="es">Un mapa, un plan día a día y una guía práctica para moverte — pensado para tu apartamento en el Eixample y tu semana real.</span></p>
+ <a class="btnlink" href="#zurich" style="margin-top:14px"><span lang="en">✈ Zurich Connection: changing planes</span><span lang="es">✈ Conexión en Zúrich: cambio de avión</span></a>
 </header>
 <main class="shell">
  <div class="topgrid">
   <section class="panel">
-   <div class="pill">YOUR HOME BASE</div>
+   <div class="pill"><span lang="en">YOUR HOME BASE</span><span lang="es">TU CASA BASE</span></div>
    <h2 style="margin-top:8px">Bonavista Apartments – Eixample</h2>
-   <div>Carrer de Provença 232, 08036 Barcelona<br><span class="small">On the corner of Carrer d’Enric Granados</span></div>
-   <p class="small">Starting point for directions. Use “Use my location” once you're out exploring to plan from where you are.</p>
+   <div>Carrer de Provença 232, 08036 Barcelona<br><span class="small"><span lang="en">On the corner of Carrer d’Enric Granados</span><span lang="es">En la esquina con Carrer d’Enric Granados</span></span></div>
+   <p class="small"><span lang="en">Starting point for directions. Use “Use my location” once you're out exploring to plan from where you are.</span><span lang="es">Punto de partida para las rutas. Cuando estés fuera explorando, usa “Usar mi ubicación” para planear desde donde estés.</span></p>
    <div class="maptools">
-    <button onclick="useGPS()">◎ Use my location</button>
-    <button class="secondary" onclick="goHome()">Back to apartment</button>
-    <button class="secondary" onclick="showAll()">Show all places</button>
+    <button onclick="useGPS()"><span lang="en">◎ Use my location</span><span lang="es">◎ Usar mi ubicación</span></button>
+    <button class="secondary" onclick="goHome()"><span lang="en">Back to apartment</span><span lang="es">Volver al apartamento</span></button>
+    <button class="secondary" onclick="showAll()"><span lang="en">Show all places</span><span lang="es">Ver todos los lugares</span></button>
    </div>
-   <div class="small" id="locationStatus">Map starts at your apartment. Location only works when this page is opened from an https:// address.</div>
+   <div class="small" id="locationStatus"><span lang="en">Map starts at your apartment. Location only works when this page is opened from an https:// address.</span><span lang="es">El mapa empieza en tu apartamento. La ubicación solo funciona si abres esta página desde una dirección https://.</span></div>
    <div class="routebox">
-    <label class="small" for="destination">Plan a trip from your current start point</label>
+    <label class="small" for="destination"><span lang="en">Plan a trip from your current start point</span><span lang="es">Planea un trayecto desde tu punto de partida</span></label>
     <select id="destination" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;margin:5px 0 8px"></select>
     <div style="display:flex;gap:7px;flex-wrap:wrap">
-     <button onclick="directions('transit')">Public transport</button>
-     <button class="secondary" onclick="directions('walking')">Walk</button>
-     <button class="secondary" onclick="directions('driving')">Taxi / car</button>
+     <button onclick="directions('transit')"><span lang="en">Public transport</span><span lang="es">Transporte público</span></button>
+     <button class="secondary" onclick="directions('walking')"><span lang="en">Walk</span><span lang="es">A pie</span></button>
+     <button class="secondary" onclick="directions('driving')"><span lang="en">Taxi / car</span><span lang="es">Taxi / coche</span></button>
     </div>
    </div>
   </section>
   <section class="panel">
-   <h2>Explore the map</h2>
+   <h2><span lang="en">Explore the map</span><span lang="es">Explora el mapa</span></h2>
    <div id="map" aria-label="Interactive map of Barcelona destinations"></div>
-   <p class="small" style="margin:9px 0 0">Tap a pin for a photo and a route button. Routes are drawn right here, and Google’s directions open in a panel alongside, with an “Open in Google Maps” button for turn-by-turn navigation.</p>
+   <p class="small" style="margin:9px 0 0"><span lang="en">Tap a pin for a photo and a route button. Routes are drawn right here, and Google’s directions open in a panel alongside, with an “Open in Google Maps” button for turn-by-turn navigation.</span><span lang="es">Toca un pin para ver una foto y un botón de ruta. Las rutas se dibujan aquí mismo, y las indicaciones de Google se abren en un panel al lado, con un botón “Abrir en Google Maps” para la navegación paso a paso.</span></p>
    <div id="routeResults" class="routebox" style="display:none;margin-top:10px">
     <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
-     <b id="routeTitle">Your route</b>
-     <button class="secondary" style="padding:6px 9px" onclick="clearRoute()">Clear route</button>
+     <b id="routeTitle"><span lang="en">Your route</span><span lang="es">Tu ruta</span></b>
+     <button class="secondary" style="padding:6px 9px" onclick="clearRoute()"><span lang="en">Clear route</span><span lang="es">Borrar ruta</span></button>
     </div>
     <div class="small" id="routeSubtitle" style="margin:5px 0 8px"></div>
     <div id="routeOptions"></div>
     <div id="routeBackup" style="margin-top:8px"></div>
-    <div class="small" style="margin-top:8px">Route data: Transitous (transit) and FOSSGIS OpenStreetMap routing (walk, car). Always check TMB service notices on the day.</div>
+    <div class="small" style="margin-top:8px"><span lang="en">Route data: Transitous (transit) and FOSSGIS OpenStreetMap routing (walk, car). Always check TMB service notices on the day.</span><span lang="es">Datos de rutas: Transitous (transporte público) y rutas de OpenStreetMap de FOSSGIS (a pie, coche). Consulta siempre los avisos de servicio de TMB ese día.</span></div>
    </div>
   </section>
  </div>
 
- <section class="panel" id="zurich" data-lang="en" style="margin-top:16px">
-  <div class="zhead">
-   <div class="pill"><span lang="en">CHANGING PLANES</span><span lang="es">CAMBIO DE AVIÓN</span></div>
-   <div class="zlang" role="group" aria-label="Language / Idioma">
-    <button class="active" aria-pressed="true" onclick="setZLang('en')">English</button>
-    <button aria-pressed="false" onclick="setZLang('es')">Español</button>
-   </div>
-  </div>
+ <section class="panel" id="zurich" style="margin-top:16px">
+  <div class="pill"><span lang="en">CHANGING PLANES</span><span lang="es">CAMBIO DE AVIÓN</span></div>
   <h2 style="margin-top:8px"><span lang="en">Zurich Connection</span><span lang="es">Conexión en Zúrich</span></h2>
   <div class="ztabs" role="tablist">
    <button class="active" role="tab" aria-selected="true" onclick="showZTab('zGoing',this)"><span lang="en">Going (to Barcelona)</span><span lang="es">Ida (a Barcelona)</span></button>
    <button role="tab" aria-selected="false" onclick="showZTab('zReturn',this)"><span lang="en">Return (to Montreal)</span><span lang="es">Vuelta (a Montreal)</span></button>
   </div>
   <div id="zGoing" class="zpane">
-   <img class="zimg" src="zurich-gates.png" alt="Zurich gate map, going: Dock E to Gate A or B" data-en="Zurich gate map, going: Dock E to Gate A or B" data-es="Mapa de puertas de Zúrich, ida: del Dock E a la puerta A o B" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
-   <p class="small" style="margin:8px 0 0"><span lang="en">Sat Nov 21 · Montreal → Zurich → Barcelona. Tap the map to zoom. Saved on your phone after your first visit, so it works offline.</span><span lang="es">Sáb 21 nov · Montreal → Zúrich → Barcelona. Toca el mapa para ampliarlo. Se guarda en tu teléfono después de la primera visita, así que funciona sin internet.</span></p>
+   <svg id="zMapGoing" class="zimg" viewBox="0 0 1290 2000" role="button" tabindex="0" data-en="Zurich gate map, going: Dock E to Gate A or B" data-es="Mapa de puertas de Zúrich, ida: del Dock E a la puerta A o B" aria-label="Zurich gate map, going: Dock E to Gate A or B" onclick="openZMap(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZMap(this);}" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,system-ui,sans-serif"><rect width="1290" height="2000" fill="#fafaf7"/><defs><marker id="gB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0 0L10 5L0 10z" fill="#1a6fd6"/></marker><marker id="gO" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0 0L10 5L0 10z" fill="#e8650a"/></marker></defs><text x="65" y="85" font-size="46" fill="#1d1d1d" font-weight="700" lang="en">Zurich Airport — your connection</text><text x="65" y="85" font-size="46" fill="#1d1d1d" font-weight="700" lang="es">Aeropuerto de Zúrich — tu conexión</text><text x="65" y="128" font-size="24" fill="#555" lang="en">Simplified top-down view, not to scale. Follow the yellow “Transfer” signs.</text><text x="65" y="128" font-size="24" fill="#555" lang="es">Vista simplificada desde arriba, sin escala. Sigue los letreros amarillos “Transfer”.</text><rect x="758" y="193" width="113" height="483" rx="14" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="814" y="258" font-size="40" fill="#1d1d1d" font-weight="700" text-anchor="middle">A</text><text x="814" y="322" font-size="20" fill="#1d1d1d" text-anchor="middle">A50s</text><text x="814" y="410" font-size="20" fill="#1d1d1d" text-anchor="middle">A60–</text><text x="814" y="438" font-size="20" fill="#1d1d1d" text-anchor="middle">A89</text><text x="814" y="612" font-size="20" fill="#1d1d1d" text-anchor="middle">A01–</text><text x="814" y="640" font-size="20" fill="#1d1d1d" text-anchor="middle">A10</text><text x="903" y="322" font-size="24" fill="#1a6fd6" font-weight="700">Dock A</text><text x="903" y="355" font-size="22" fill="#444" lang="en">Schengen gates</text><text x="903" y="355" font-size="22" fill="#444" lang="es">Puertas Schengen</text><text x="903" y="387" font-size="22" fill="#444" lang="en">(flights inside Europe,</text><text x="903" y="387" font-size="22" fill="#444" lang="es">(vuelos dentro de Europa,</text><text x="903" y="419" font-size="22" fill="#444" lang="en">e.g. Barcelona)</text><text x="903" y="419" font-size="22" fill="#444" lang="es">p. ej. Barcelona)</text><text x="65" y="628" font-size="24" fill="#1a6fd6" font-weight="700" lang="en">Dock B/D = same pier, two names</text><text x="65" y="628" font-size="24" fill="#1a6fd6" font-weight="700" lang="es">Dock B/D = mismo muelle, dos nombres</text><text x="65" y="660" font-size="20" fill="#444" lang="en">B = inside Europe · D = leaving Europe</text><text x="65" y="660" font-size="20" fill="#444" lang="es">B = dentro de Europa · D = saliendo de Europa</text><rect x="65" y="710" width="338" height="103" rx="14" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="234" y="758" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle">B / D</text><text x="234" y="793" font-size="20" fill="#333" text-anchor="middle">B/D 31–54</text><rect x="274" y="813" width="91" height="193" rx="14" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="319" y="903" font-size="20" fill="#333" text-anchor="middle">21–</text><text x="319" y="931" font-size="20" fill="#333" text-anchor="middle">25</text><rect x="403" y="677" width="515" height="273" rx="16" fill="#fff3cc" stroke="#e0aa00" stroke-width="3"/><text x="425" y="728" font-size="28" fill="#1d1d1d" font-weight="700" lang="en">AIRSIDE CENTRE</text><text x="425" y="728" font-size="28" fill="#1d1d1d" font-weight="700" lang="es">CENTRO AIRSIDE</text><text x="425" y="764" font-size="18" fill="#444" lang="en">Level 1 · shops · Transfer desk</text><text x="425" y="764" font-size="18" fill="#444" lang="es">Nivel 1 · tiendas · mostrador Transfer</text><rect x="483" y="806" width="355" height="104" rx="10" fill="#fff" stroke="#c0392b" stroke-width="3"/><text x="660" y="848" font-size="26" fill="#c0392b" font-weight="700" text-anchor="middle" lang="en">PASSPORT CONTROL</text><text x="660" y="848" font-size="22" fill="#c0392b" font-weight="700" text-anchor="middle" lang="es">CONTROL DE PASAPORTES</text><text x="660" y="884" font-size="20" fill="#444" text-anchor="middle" lang="en">between Europe (A/B) and D/E</text><text x="660" y="884" font-size="20" fill="#444" text-anchor="middle" lang="es">entre Europa (A/B) y D/E</text><rect x="403" y="984" width="323" height="55" rx="10" fill="#eee" stroke="#aaa" stroke-width="2"/><text x="564" y="1019" font-size="18" fill="#555" text-anchor="middle" lang="en">Bus gates B02–B10 (level 0)</text><text x="564" y="1019" font-size="18" fill="#555" text-anchor="middle" lang="es">Puertas de bus B02–B10 (nivel 0)</text><path d="M814 950V1048" stroke="#3a9a5b" stroke-width="3"/><rect x="709" y="1048" width="210" height="65" rx="10" fill="#e8f5ec" stroke="#3a9a5b" stroke-width="3"/><text x="814" y="1090" font-size="18" fill="#1e6b3a" font-weight="700" text-anchor="middle" lang="en">Skymetro (lvl −2)</text><text x="814" y="1090" font-size="18" fill="#1e6b3a" font-weight="700" text-anchor="middle" lang="es">Skymetro (nivel −2)</text><text x="826" y="1000" font-size="18" fill="#1e6b3a" lang="en">escalators up</text><text x="826" y="1000" font-size="18" fill="#1e6b3a" lang="es">escaleras arriba</text><text x="826" y="1026" font-size="18" fill="#1e6b3a" lang="en">from level −2</text><text x="826" y="1026" font-size="18" fill="#1e6b3a" lang="es">desde nivel −2</text><text x="840" y="1177" font-size="20" fill="#1e6b3a" text-anchor="end" lang="en">Skymetro: train under the runway, ~3 min</text><text x="840" y="1177" font-size="20" fill="#1e6b3a" text-anchor="end" lang="es">Skymetro: tren bajo la pista, ~3 min</text><rect x="880" y="1290" width="390" height="145" rx="16" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="1075" y="1348" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle">Dock E</text><text x="1075" y="1387" font-size="20" fill="#333" text-anchor="middle" lang="en">E16–E67 · separate building</text><text x="1075" y="1387" font-size="20" fill="#333" text-anchor="middle" lang="es">E16–E67 · edificio aparte</text><text x="1075" y="1416" font-size="20" fill="#333" text-anchor="middle" lang="en">Montreal flights usually here</text><text x="1075" y="1416" font-size="20" fill="#333" text-anchor="middle" lang="es">Vuelos a Montreal: normalmente aquí</text><path d="M1015 1288C1000 1220 900 1190 852 1140" fill="none" stroke="#1a6fd6" stroke-width="7" marker-end="url(#gB)"/><path d="M758 1040V935" fill="none" stroke="#1a6fd6" stroke-width="7" marker-end="url(#gB)"/><path d="M814 802V700" fill="none" stroke="#1a6fd6" stroke-width="7" marker-end="url(#gB)"/><path d="M483 842L418 812" fill="none" stroke="#1a6fd6" stroke-width="7" stroke-dasharray="4 12" stroke-linecap="round" marker-end="url(#gB)"/><path d="M838 678C900 740 905 800 858 836" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#gO)"/><path d="M483 878C440 892 400 880 372 842" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#gO)"/><path d="M905 900H1130V1272" fill="none" stroke="#e8650a" stroke-width="7" stroke-dasharray="4 12" stroke-linecap="round" marker-end="url(#gO)"/><rect x="48" y="1484" width="1193" height="483" rx="22" fill="#fff" stroke="#ddd" stroke-width="2"/><rect x="80" y="1526" width="65" height="10" fill="#1a6fd6"/><text x="161" y="1542" font-size="28" fill="#1a6fd6" font-weight="700" lang="en">GOING — Sat Nov 21 · Montreal → Zurich → Barcelona</text><text x="161" y="1542" font-size="28" fill="#1a6fd6" font-weight="700" lang="es">IDA — Sáb 21 nov · Montreal → Zúrich → Barcelona</text><text x="80" y="1584" font-size="22" fill="#222" lang="en">1. Land at Dock E → follow yellow “Transfer”</text><text x="80" y="1584" font-size="22" fill="#222" lang="es">1. Aterrizas en el Dock E → sigue el letrero amarillo “Transfer”</text><text x="80" y="1616" font-size="22" fill="#222" lang="en">2. Skymetro (one way only, 3 min) → escalator up</text><text x="80" y="1616" font-size="22" fill="#222" lang="es">2. Skymetro (un solo sentido, 3 min) → escalera mecánica arriba</text><text x="80" y="1648" font-size="22" fill="#222" lang="en">3. Passport control (enter Europe) → screens / Swiss app → Gate A or B</text><text x="80" y="1648" font-size="22" fill="#222" lang="es">3. Control de pasaportes (entras en Europa) → pantallas / app de Swiss → puerta A o B</text><rect x="80" y="1728" width="65" height="10" fill="#e8650a"/><text x="161" y="1744" font-size="28" fill="#e8650a" font-weight="700" lang="en">RETURN — Sat Nov 28 · 55 min, go straight!</text><text x="161" y="1744" font-size="28" fill="#e8650a" font-weight="700" lang="es">VUELTA — Sáb 28 nov · 55 min, ¡ve directo!</text><text x="80" y="1786" font-size="22" fill="#222" lang="en">1. Land 11:45 at A or B (AC 6783) → follow “Transfer · Gates D, E”</text><text x="80" y="1786" font-size="22" fill="#222" lang="es">1. Aterrizas a las 11:45 en A o B (AC 6783) → sigue “Transfer · Gates D, E”</text><text x="80" y="1818" font-size="22" fill="#222" lang="en">2. Passport control (leave Europe)</text><text x="80" y="1818" font-size="22" fill="#222" lang="es">2. Control de pasaportes (sales de Europa)</text><text x="80" y="1850" font-size="22" fill="#222" lang="en">3. D gate = short walk · E gate = Skymetro</text><text x="80" y="1850" font-size="22" fill="#222" lang="es">3. Puerta D = a pocos pasos · Puerta E = Skymetro</text><text x="80" y="1882" font-size="22" fill="#222" lang="en">4. AC 6821 to Montreal departs 12:40 — boarding ~12:00</text><text x="80" y="1882" font-size="22" fill="#222" lang="es">4. El AC 6821 a Montreal sale a las 12:40 — embarque ~12:00</text><text x="80" y="1922" font-size="18" fill="#777" lang="en">Bags are checked through both ways: don’t exit, ignore “Exit / Baggage claim”.</text><text x="80" y="1922" font-size="18" fill="#777" lang="es">Las maletas van facturadas hasta destino en ambos sentidos: no salgas, ignora “Exit / Baggage claim”.</text><text x="80" y="1947" font-size="18" fill="#777" lang="en">Missed it? The Swiss Transfer desk rebooks you.</text><text x="80" y="1947" font-size="18" fill="#777" lang="es">¿Perdiste el vuelo? El mostrador Transfer de Swiss te cambia a otro.</text></svg>
+   <p class="small" style="margin:8px 0 0"><span lang="en">Sat Nov 21 · Montreal → Zurich → Barcelona. Tap the map to zoom. It's built into the page, so it works offline.</span><span lang="es">Sáb 21 nov · Montreal → Zúrich → Barcelona. Toca el mapa para ampliarlo. Está dentro de la página, así que funciona sin internet.</span></p>
    <ol class="zsteps">
     <li><span lang="en"><b>Land at Dock E</b>: follow the yellow “Transfer” / “All gates” signs.</span><span lang="es"><b>Aterrizas en el Dock E</b>: sigue los letreros amarillos “Transfer” / “All gates”.</span></li>
     <li><span lang="en"><b>Skymetro</b>: the train runs under the runway (about 3 min), then escalator up.</span><span lang="es"><b>Skymetro</b>: el tren pasa por debajo de la pista (unos 3 min); luego sube por la escalera mecánica.</span></li>
@@ -828,7 +823,7 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
    </div>
   </div>
   <div id="zReturn" class="zpane" hidden>
-   <img class="zimg" src="zurich-return.jpg" alt="Zurich gate map, return: Gate A or B to a D or E gate" data-en="Zurich gate map, return: Gate A or B to a D or E gate" data-es="Mapa de puertas de Zúrich, vuelta: de la puerta A o B a una puerta D o E" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
+   <svg id="zMapReturn" class="zimg" viewBox="0 0 1333 2000" role="button" tabindex="0" data-en="Zurich gate map, return: Gate A or B to a D or E gate" data-es="Mapa de puertas de Zúrich, vuelta: de la puerta A o B a una puerta D o E" aria-label="Zurich gate map, return: Gate A or B to a D or E gate" onclick="openZMap(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZMap(this);}" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,system-ui,sans-serif"><rect width="1333" height="2000" fill="#fafaf7"/><defs><marker id="rB" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0 0L10 5L0 10z" fill="#1a6fd6"/></marker><marker id="rO" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse" markerUnits="strokeWidth"><path d="M0 0L10 5L0 10z" fill="#e8650a"/></marker></defs><text x="67" y="85" font-size="46" fill="#1d1d1d" font-weight="700" lang="en">Zurich — RETURN connection</text><text x="67" y="85" font-size="46" fill="#1d1d1d" font-weight="700" lang="es">Zúrich — conexión de VUELTA</text><text x="67" y="140" font-size="30" fill="#e8650a" font-weight="700" lang="en">Sat Nov 28 · Barcelona → Zurich → Montreal</text><text x="67" y="140" font-size="30" fill="#e8650a" font-weight="700" lang="es">Sáb 28 nov · Barcelona → Zúrich → Montreal</text><text x="67" y="183" font-size="22" fill="#555" lang="en">Simplified, not to scale. Follow yellow “Transfer · Gates D, E” signs.</text><text x="67" y="183" font-size="22" fill="#555" lang="es">Simplificado, sin escala. Sigue los letreros amarillos “Transfer · Gates D, E”.</text><rect x="67" y="216" width="1200" height="117" rx="16" fill="#fff0e8" stroke="#e8650a" stroke-width="3"/><text x="100" y="266" font-size="28" fill="#1d1d1d" font-weight="700" lang="en">Land 11:45 (AC 6783) → Depart 12:40 (AC 6821)</text><text x="100" y="266" font-size="28" fill="#1d1d1d" font-weight="700" lang="es">Aterrizas 11:45 (AC 6783) → Sales 12:40 (AC 6821)</text><text x="100" y="308" font-size="24" fill="#c0392b" font-weight="700" lang="en">Only 55 min — no shopping, no food, go straight. Boarding ~12:00.</text><text x="100" y="308" font-size="24" fill="#c0392b" font-weight="700" lang="es">Solo 55 min — sin tiendas ni comida, ve directo. Embarque ~12:00.</text><rect x="783" y="383" width="117" height="333" rx="14" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="841" y="450" font-size="40" fill="#1d1d1d" font-weight="700" text-anchor="middle">A</text><text x="841" y="550" font-size="20" fill="#333" text-anchor="middle">A01–A89</text><circle cx="841" cy="634" r="26" fill="#e8650a"/><text x="841" y="642" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">1</text><text x="933" y="450" font-size="24" fill="#e8650a" font-weight="700" lang="en">START: you land</text><text x="933" y="450" font-size="24" fill="#e8650a" font-weight="700" lang="es">INICIO: aterrizas</text><text x="933" y="484" font-size="22" fill="#444" lang="en">at an A or B gate</text><text x="933" y="484" font-size="22" fill="#444" lang="es">en una puerta A o B</text><text x="933" y="517" font-size="22" fill="#444" lang="en">(Europe side)</text><text x="933" y="517" font-size="22" fill="#444" lang="es">(lado Europa)</text><text x="67" y="733" font-size="20" fill="#444" lang="en">(you may have landed on the B side)</text><text x="67" y="733" font-size="20" fill="#444" lang="es">(quizá aterrices en el lado B)</text><rect x="416" y="733" width="533" height="284" rx="18" fill="#fff3cc" stroke="#e0aa00" stroke-width="3"/><text x="440" y="782" font-size="28" fill="#1d1d1d" font-weight="700" lang="en">AIRSIDE CENTRE</text><text x="440" y="782" font-size="28" fill="#1d1d1d" font-weight="700" lang="es">CENTRO AIRSIDE</text><text x="440" y="818" font-size="18" fill="#444" lang="en">Transfer desk · shops (skip!)</text><text x="440" y="818" font-size="18" fill="#444" lang="es">mostrador Transfer · tiendas (¡sáltalas!)</text><circle cx="908" cy="833" r="26" fill="#e8650a"/><text x="908" y="841" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">2</text><rect x="483" y="858" width="400" height="116" rx="12" fill="#fff" stroke="#c0392b" stroke-width="3"/><text x="683" y="903" font-size="24" fill="#c0392b" font-weight="700" text-anchor="middle" lang="en">PASSPORT CONTROL</text><text x="683" y="903" font-size="24" fill="#c0392b" font-weight="700" text-anchor="middle" lang="es">CONTROL DE PASAPORTES</text><text x="683" y="944" font-size="20" fill="#444" text-anchor="middle" lang="en">exit stamp — leaving Europe</text><text x="683" y="944" font-size="20" fill="#444" text-anchor="middle" lang="es">sello de salida — sales de Europa</text><rect x="67" y="766" width="316" height="108" rx="14" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="225" y="813" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle" lang="en">D gates</text><text x="225" y="813" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle" lang="es">Puertas D</text><text x="225" y="854" font-size="18" fill="#333" text-anchor="middle" lang="en">D21–D54 · same pier as B</text><text x="225" y="854" font-size="18" fill="#333" text-anchor="middle" lang="es">D21–D54 · mismo muelle que B</text><circle cx="117" cy="975" r="26" fill="#e8650a"/><text x="117" y="983" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">3</text><text x="152" y="983" font-size="20" fill="#1d1d1d" font-weight="700" lang="en">D gate = short walk</text><text x="152" y="983" font-size="20" fill="#1d1d1d" font-weight="700" lang="es">Puerta D = a pocos pasos</text><rect x="716" y="1100" width="250" height="70" rx="12" fill="#e8f5ec" stroke="#3a9a5b" stroke-width="3"/><text x="841" y="1144" font-size="18" fill="#1e6b3a" font-weight="700" text-anchor="middle" lang="en">Skymetro (lvl −2)</text><text x="841" y="1144" font-size="18" fill="#1e6b3a" font-weight="700" text-anchor="middle" lang="es">Skymetro (nivel −2)</text><text x="880" y="1250" font-size="20" fill="#1e6b3a" text-anchor="end" lang="en">escalators down → train under runway, ~3 min</text><text x="880" y="1250" font-size="20" fill="#1e6b3a" text-anchor="end" lang="es">escaleras abajo → tren bajo la pista, ~3 min</text><rect x="900" y="1333" width="400" height="150" rx="16" fill="#dce8f8" stroke="#7fa6d6" stroke-width="3"/><text x="1100" y="1393" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle" lang="en">E gates</text><text x="1100" y="1393" font-size="34" fill="#1d1d1d" font-weight="700" text-anchor="middle" lang="es">Puertas E</text><text x="1100" y="1433" font-size="20" fill="#333" text-anchor="middle" lang="en">E16–E67 · separate building</text><text x="1100" y="1433" font-size="20" fill="#333" text-anchor="middle" lang="es">E16–E67 · edificio aparte</text><text x="1100" y="1463" font-size="18" fill="#333" text-anchor="middle" lang="en">Montreal flight likely here</text><text x="1100" y="1463" font-size="18" fill="#333" text-anchor="middle" lang="es">Vuelo a Montreal: probablemente aquí</text><circle cx="966" cy="1317" r="26" fill="#e8650a"/><text x="966" y="1325" font-size="24" font-weight="700" fill="#fff" text-anchor="middle">3</text><path d="M841 718V840" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#rO)"/><path d="M483 933C440 936 420 922 398 892" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#rO)"/><path d="M800 978V1082" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#rO)"/><path d="M883 1175C930 1240 1050 1260 1092 1316" fill="none" stroke="#e8650a" stroke-width="7" marker-end="url(#rO)"/><rect x="50" y="1533" width="1233" height="433" rx="22" fill="#fff" stroke="#ddd" stroke-width="2"/><text x="84" y="1590" font-size="30" fill="#e8650a" font-weight="700" lang="en">Step by step</text><text x="84" y="1590" font-size="30" fill="#e8650a" font-weight="700" lang="es">Paso a paso</text><text x="84" y="1647" font-size="24" fill="#222" lang="en">1. Get off the plane → follow yellow “Transfer · Gates D, E”</text><text x="84" y="1647" font-size="24" fill="#222" lang="es">1. Baja del avión → sigue los letreros amarillos “Transfer · Gates D, E”</text><text x="84" y="1694" font-size="24" fill="#222" lang="en">Ignore “Exit” and “Baggage claim” — bags go through to Montreal</text><text x="84" y="1694" font-size="24" fill="#222" lang="es">Ignora “Exit” y “Baggage claim” — las maletas van hasta Montreal</text><text x="84" y="1741" font-size="24" fill="#222" lang="en">2. Passport control (the only line that can slow you down)</text><text x="84" y="1741" font-size="24" fill="#222" lang="es">2. Control de pasaportes (la única fila que te puede retrasar)</text><text x="84" y="1788" font-size="24" fill="#222" lang="en">3. Check the screens / Swiss app for your gate:</text><text x="84" y="1788" font-size="24" fill="#222" lang="es">3. Mira tu puerta en las pantallas / app de Swiss:</text><text x="84" y="1835" font-size="24" fill="#222" lang="en">D gate → walk · E gate → Skymetro (~10–15 min total from passport control)</text><text x="84" y="1835" font-size="24" fill="#222" lang="es">Puerta D → a pie · Puerta E → Skymetro (~10–15 min en total desde pasaportes)</text><text x="84" y="1882" font-size="24" fill="#222" lang="en">4. Board AC 6821 to Montreal — departs 12:40</text><text x="84" y="1882" font-size="24" fill="#222" lang="es">4. Embarca en el AC 6821 a Montreal — sale a las 12:40</text><text x="84" y="1925" font-size="18" fill="#777" lang="en">Tip: get BOTH boarding passes at Barcelona check-in.</text><text x="84" y="1925" font-size="18" fill="#777" lang="es">Consejo: pide LAS DOS tarjetas de embarque al facturar en Barcelona.</text><text x="84" y="1950" font-size="18" fill="#777" lang="en">Missed it? The Swiss Transfer desk rebooks you.</text><text x="84" y="1950" font-size="18" fill="#777" lang="es">¿Perdiste el vuelo? El mostrador Transfer de Swiss te cambia a otro.</text></svg>
    <p class="small" style="margin:8px 0 0"><span lang="en">Sat Nov 28 · Barcelona → Zurich → Montreal. Tap the map to zoom. Works offline.</span><span lang="es">Sáb 28 nov · Barcelona → Zúrich → Montreal. Toca el mapa para ampliarlo. Funciona sin internet.</span></p>
    <div class="routebox" style="margin-top:10px">
     <b><span lang="en">Land Zurich 11:45 (AC 6783) → depart 12:40 (AC 6821). Only 55 min: go straight to your gate.</span><span lang="es">Aterrizas en Zúrich a las 11:45 (AC 6783) → sales a las 12:40 (AC 6821). Solo 55 min: ve directo a tu puerta.</span></b>
@@ -855,64 +850,64 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
  </section>
 
  <section class="panel" style="margin-top:16px">
-  <h2>Your week, one day at a time</h2>
+  <h2><span lang="en">Your week, one day at a time</span><span lang="es">Tu semana, día a día</span></h2>
   <div id="dayTabs"></div>
   <div id="dayContent"></div>
  </section>
 
  <section class="panel" style="margin-top:16px">
-  <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap"><h2>Food shops near the apartment</h2><button class="secondary" onclick="focusShops()">Show shops on map</button></div>
-  <p class="small" style="margin:0">Most shops close on Sunday; the corner shop stays open. Opening hours come from OpenStreetMap, so check Google before you go. Tap “Photos & reviews” for current ratings.</p>
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap"><h2><span lang="en">Food shops near the apartment</span><span lang="es">Tiendas de comida cerca del apartamento</span></h2><button class="secondary" onclick="focusShops()"><span lang="en">Show shops on map</span><span lang="es">Ver tiendas en el mapa</span></button></div>
+  <p class="small" style="margin:0"><span lang="en">Most shops close on Sunday; the corner shop stays open. Opening hours come from OpenStreetMap, so check Google before you go. Tap “Photos & reviews” for current ratings.</span><span lang="es">La mayoría de las tiendas cierran el domingo; la tienda de la esquina sigue abierta. Los horarios vienen de OpenStreetMap, así que confírmalos en Google antes de ir. Toca “Fotos y reseñas” para ver las valoraciones actuales.</span></p>
   <div id="shopList" class="shopgrid"></div>
  </section>
 
  <div class="columns">
   <section class="panel">
-   <h2>Your local companion</h2>
-   <p class="small">Quick answers about this itinerary from a built-in list of tips. It's not live AI, so for anything else, ask Claude.</p>
+   <h2><span lang="en">Your local companion</span><span lang="es">Tu guía local</span></h2>
+   <p class="small"><span lang="en">Quick answers about this itinerary from a built-in list of tips. It's not live AI, so for anything else, ask Claude.</span><span lang="es">Respuestas rápidas sobre este itinerario a partir de una lista de consejos incluida. No es IA en vivo, así que para cualquier otra cosa, pregúntale a Claude.</span></p>
    <div class="chat">
-    <div class="messages" id="messages"><div class="msg bot">Hola! Ask me how to get somewhere, what to eat, what's nearby, or what to do if it rains.</div></div>
+    <div class="messages" id="messages"><div class="msg bot"><span lang="en">Hola! Ask me how to get somewhere, what to eat, what's nearby, or what to do if it rains.</span><span lang="es">¡Hola! Pregúntame cómo llegar a un sitio, qué comer, qué hay cerca o qué hacer si llueve.</span></div></div>
     <div class="suggestions">
-     <button class="secondary" onclick="ask('How do I get to Sagrada Família from the apartment?')">Get to Sagrada Família</button>
-     <button class="secondary" onclick="ask('What should we eat in Barcelona?')">What should we eat?</button>
-     <button class="secondary" onclick="ask('What is nearby Park Güell?')">What's nearby?</button>
-     <button class="secondary" onclick="ask('What if it rains?')">Rainy-day plan</button>
+     <button class="secondary" onclick="ask(t('How do I get to Sagrada Família from the apartment?','¿Cómo llego a la Sagrada Família desde el apartamento?'))"><span lang="en">Get to Sagrada Família</span><span lang="es">Ir a la Sagrada Família</span></button>
+     <button class="secondary" onclick="ask(t('What should we eat in Barcelona?','¿Qué comemos en Barcelona?'))"><span lang="en">What should we eat?</span><span lang="es">¿Qué comemos?</span></button>
+     <button class="secondary" onclick="ask(t('What is nearby Park Güell?','¿Qué hay cerca del Park Güell?'))"><span lang="en">What's nearby?</span><span lang="es">¿Qué hay cerca?</span></button>
+     <button class="secondary" onclick="ask(t('What if it rains?','¿Y si llueve?'))"><span lang="en">Rainy-day plan</span><span lang="es">Plan para día de lluvia</span></button>
     </div>
-    <div class="chatrow"><input id="question" placeholder="Ask your guide…" onkeydown="if(event.key==='Enter')sendQuestion()"><button onclick="sendQuestion()">Ask</button></div>
+    <div class="chatrow"><input id="question" placeholder="Ask your guide…" onkeydown="if(event.key==='Enter')sendQuestion()"><button onclick="sendQuestion()"><span lang="en">Ask</span><span lang="es">Preguntar</span></button></div>
    </div>
   </section>
   <section class="panel">
-   <h2>Before you go</h2>
+   <h2><span lang="en">Before you go</span><span lang="es">Antes de salir</span></h2>
    <div class="todo" id="todo"></div>
    <div class="routebox">
-    <b>Useful official links</b>
-    <p class="small" style="margin:6px 0"><a target="_blank" rel="noopener" href="https://www.tmb.cat/en/barcelona-transport">TMB transport & journey planner ↗</a><br>
-    <a target="_blank" rel="noopener" href="https://www.tmb.cat/en/barcelona/metro/line-map">Barcelona metro map ↗</a><br>
-    <a target="_blank" rel="noopener" href="https://www.sagradafamilia.org/en/tickets">Sagrada Família tickets ↗</a><br>
-    <a target="_blank" rel="noopener" href="https://parkguell.barcelona/en/buy-tickets">Park Güell tickets ↗</a><br>
-    <a target="_blank" rel="noopener" href="https://museupicassobcn.cat/en">Picasso Museum (free Thursday slots) ↗</a><br>
+    <b><span lang="en">Useful official links</span><span lang="es">Enlaces oficiales útiles</span></b>
+    <p class="small" style="margin:6px 0"><a target="_blank" rel="noopener" href="https://www.tmb.cat/en/barcelona-transport"><span lang="en">TMB transport & journey planner ↗</span><span lang="es">Transporte TMB y planificador de viajes ↗</span></a><br>
+    <a target="_blank" rel="noopener" href="https://www.tmb.cat/en/barcelona/metro/line-map"><span lang="en">Barcelona metro map ↗</span><span lang="es">Mapa del metro de Barcelona ↗</span></a><br>
+    <a target="_blank" rel="noopener" href="https://www.sagradafamilia.org/en/tickets"><span lang="en">Sagrada Família tickets ↗</span><span lang="es">Entradas Sagrada Família ↗</span></a><br>
+    <a target="_blank" rel="noopener" href="https://parkguell.barcelona/en/buy-tickets"><span lang="en">Park Güell tickets ↗</span><span lang="es">Entradas Park Güell ↗</span></a><br>
+    <a target="_blank" rel="noopener" href="https://museupicassobcn.cat/en"><span lang="en">Picasso Museum (free Thursday slots) ↗</span><span lang="es">Museo Picasso (franjas gratis los jueves) ↗</span></a><br>
     <a target="_blank" rel="noopener" href="https://www.google.com/maps">Google Maps ↗</a></p>
    </div>
    <!-- TourScanner can't be shown in a frame here (it only allows framing on its own site), so it opens in a new tab -->
    <div class="routebox">
-    <b>Tours & activities</b>
-    <p class="small" style="margin:6px 0 8px">Compare prices for Barcelona tours and tickets from many sellers.</p>
-    <a class="btnlink" target="_blank" rel="noopener" href="https://tourscanner.com/l/barcelona">Find Barcelona tours on TourScanner ↗</a>
+    <b><span lang="en">Tours & activities</span><span lang="es">Tours y actividades</span></b>
+    <p class="small" style="margin:6px 0 8px"><span lang="en">Compare prices for Barcelona tours and tickets from many sellers.</span><span lang="es">Compara precios de tours y entradas en Barcelona de muchos vendedores.</span></p>
+    <a class="btnlink" target="_blank" rel="noopener" href="https://tourscanner.com/l/barcelona"><span lang="en">Find Barcelona tours on TourScanner ↗</span><span lang="es">Buscar tours de Barcelona en TourScanner ↗</span></a>
    </div>
   </section>
  </div>
- <div class="warning"><b>Travel-smart note:</b> Transit lines, fares, opening hours and live arrivals can change. Check TMB or Google Maps on the day. Keep phones secure in crowded areas, especially La Rambla and busy metro stations.</div>
+ <div class="warning"><span lang="en"><b>Travel-smart note:</b> Transit lines, fares, opening hours and live arrivals can change. Check TMB or Google Maps on the day. Keep phones secure in crowded areas, especially La Rambla and busy metro stations.</span><span lang="es"><b>Consejo de viaje:</b> Las líneas, tarifas, horarios y llegadas en tiempo real pueden cambiar. Consulta TMB o Google Maps ese día. Cuida tus teléfonos en zonas concurridas, sobre todo en La Rambla y en las estaciones de metro con mucha gente.</span></div>
 </main>
 <aside id="gPanel" hidden aria-label="Google Maps directions">
- <div class="ghead"><b id="gTitle">Google directions</b><a id="gOpen" class="btnlink" target="_blank" rel="noopener" href="#">Open in Google Maps ↗</a><button onclick="closeGooglePanel()" aria-label="Close Google directions">✕ Close</button></div>
+ <div class="ghead"><b id="gTitle"><span lang="en">Google directions</span><span lang="es">Indicaciones de Google</span></b><a id="gOpen" class="btnlink" target="_blank" rel="noopener" href="#"><span lang="en">Open in Google Maps ↗</span><span lang="es">Abrir en Google Maps ↗</span></a><button onclick="closeGooglePanel()" aria-label="Close Google directions"><span lang="en">✕ Close</span><span lang="es">✕ Cerrar</span></button></div>
  <iframe id="gFrame" title="Google Maps directions" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </aside>
 <div id="photoBox" hidden role="dialog" aria-modal="true" aria-label="Photo">
  <button id="photoClose" onclick="closePhoto()" aria-label="Close photo">✕</button>
  <div id="photoStage"><img id="photoImg" alt=""></div>
- <div id="photoCap"><b id="photoName"></b><br><span class="small">Pinch or double-tap to zoom<span id="photoCredit"> · Photo: Wikipedia / Wikimedia Commons</span></span></div>
+ <div id="photoCap"><b id="photoName"></b><br><span class="small"><span lang="en">Pinch or double-tap to zoom</span><span lang="es">Pellizca o toca dos veces para ampliar</span><span id="photoCredit"> · <span lang="en">Photo</span><span lang="es">Foto</span>: Wikipedia / Wikimedia Commons</span></span></div>
 </div>
-<footer>Barcelona Local Companion · Personal trip guide for Pete, his son and Esmeralda · Version 2.6<br>Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</footer>
+<footer>Barcelona Local Companion · <span lang="en">Personal trip guide for Pete, his son and Esmeralda · Version 2.9</span><span lang="es">Guía de viaje personal para Pete, su hijo y Esmeralda · Versión 2.9</span><br><span lang="en">Map data © OpenStreetMap contributors · Photos from Wikipedia / Wikimedia Commons · Routing by external services.</span><span lang="es">Datos del mapa © colaboradores de OpenStreetMap · Fotos de Wikipedia / Wikimedia Commons · Rutas de servicios externos.</span></footer>
 <script>/* Leaflet 1.9.4 (built in, BSD-2) */
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
@@ -922,6 +917,11 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 //# sourceMappingURL=leaflet.js.map
 </script>
 <script>
+/* ---------- Language: English / Español (choice remembered on this phone) ---------- */
+let LANG='en';
+try{const l=localStorage.getItem('lang')||localStorage.getItem('zLang');if(l==='es')LANG='es';}catch(e){}
+const t=(en,es)=>LANG==='es'?es:en;            // pick the text for the current language
+const tr=(o,f)=>(LANG==='es'&&o[f+'_es'])||o[f]; // a data field, using its _es version in Spanish
 const home=[41.39137,2.15724]; // Carrer de Provença 232 (OpenStreetMap address point)
 // wiki: Wikipedia article titles used to fetch a real photo of each place (first one that has a picture wins)
 const places=[
@@ -949,6 +949,32 @@ const places=[
 {id:'concepcio',shop:true,name:'Mercat de la Concepció',lat:41.39588,lon:2.16864,desc:'Covered local market for fruit, fish, meat and flowers, about 1.1 km east. Mon & Sat 8:00–15:00, Tue–Fri 8:00–20:00, closed Sunday.',icon:'🥖',wiki:['ca:Mercat_de_la_Concepció'],gname:'Mercat de la Concepció'},
 {id:'girona',name:'Girona · optional day trip',lat:41.9794,lon:2.8214,desc:'Optional full-day tour on Friday, only if the group wants another trip.',icon:'🏘️',wiki:['Girona']}
 ];
+const PLACES_ES={
+ home:[null,'Tu casa base · Carrer de Provença 232, 08036, en la esquina con Carrer d’Enric Granados.'],
+ pedrera:[null,'El edificio ondulado de piedra de Gaudí, con sus chimeneas en la azotea. A dos minutos del apartamento.'],
+ batllo:[null,'La casa del tejado de dragón en el Passeig de Gràcia.'],
+ campnou:[null,'Día de partido: Barça vs Villarreal. Confirma el estadio y la puerta de acceso en tu entrada.'],
+ sagrada:[null,'La basílica de Gaudí. Se necesita entrada con hora (26 €, 36 € con torre); calcula 1,5–2 horas.'],
+ santpau:['Hospital de Sant Pau · opcional','Un precioso conjunto modernista cerca de la basílica. Opcional, solo si hay tiempo.'],
+ parkguell:[null,'Dragón de mosaico, banco ondulado y vistas de la ciudad. Reserva la entrada con hora a la Zona Monumental (18 €).'],
+ bunkers:[null,'Mirador gratuito en lo alto de una colina para ver el atardecer. Corta subida a pie; lleva algo de abrigo.'],
+ boqueria:[null,'Mercado cubierto de comida en La Rambla. Ve antes del mediodía.'],
+ cathedral:['Catedral de Barcelona','Monumento emblemático del Barrio Gótico.'],
+ born:[null,'Callejuelas históricas, cafés y tapas alrededor de la basílica.'],
+ barceloneta:['Playa de la Barceloneta','Paseo junto al mar y comida de paella de marisco.'],
+ montserrat:['Monasterio de Montserrat','Tour guiado de día completo. El punto de encuentro y lo que incluye dependen de la versión reservada.'],
+ montjuic:['Teleférico del Castillo de Montjuïc','Teleférico (17,10 € en línea) y vistas del puerto desde el castillo.'],
+ mnac:['Terraza del MNAC','Mirador gratuito en la terraza, sobre la Plaça d’Espanya.'],
+ portvell:['Port Vell · zona de salida del velero','Confirma el muelle exacto de encuentro en la confirmación de tu paseo en velero.'],
+ picasso:['Museo Picasso','En El Born. Gratis los jueves a partir de las 17:00 con franja reservada (si no, 14 €).'],
+ shop24:['Supermercat · tienda de la esquina','Pequeña tienda de alimentación a unos 250 m al norte, cerca de Rosselló. Abre todos los días de 7:30 a medianoche, domingos incluidos.'],
+ caprabo:[null,'Supermercado completo a unos 400 m al norte. Consulta el horario en Google.'],
+ bonpreu:[null,'Gran supermercado catalán a unos 60 m por Provença, casi al lado. Lun–sáb 9:00–21:00, cerrado el domingo.'],
+ mercadona:[null,'El gran supermercado económico de España, bueno para lo básico, a unos 450 m. Lun–sáb 9:00–21:00, cerrado el domingo.'],
+ concepcio:[null,'Mercado cubierto de barrio con fruta, pescado, carne y flores, a unos 1,1 km al este. Lun y sáb 8:00–15:00, mar–vie 8:00–20:00, cerrado el domingo.'],
+ girona:['Girona · excursión opcional','Tour opcional de día completo el viernes, solo si el grupo quiere otra excursión.']
+};
+places.forEach(p=>{const e=PLACES_ES[p.id];if(e){if(e[0])p.name_es=e[0];p.desc_es=e[1];}});
 const days=[
 {key:'Saturday',date:'Nov 21',title:'Arrive & discover Gaudí’s street',items:['Land at 9:05 at Terminal 1; take a Cabify to the apartment.','Ask Bonavista about early luggage drop-off.','Easy walk: La Pedrera and Casa Batlló from outside.','Buy T-casual cards, plus groceries for Sunday (most shops close Sundays).','Easy dinner and an early night.'],ids:['pedrera','batllo'],note:'Keep this day light after the flight.'},
 {key:'Sunday',date:'Nov 22',title:'FC Barcelona vs Villarreal',items:['Slow breakfast and an optional Gràcia neighbourhood stroll.','10:00 · Book free Picasso Museum slots for Thursday evening.','Check the stadium and kickoff time on your ticket.','Arrive at least one hour before kickoff; take only a small bag.'],ids:['campnou'],note:'The itinerary assumes Camp Nou; follow the venue printed on your ticket.'},
@@ -959,6 +985,18 @@ const days=[
 {key:'Friday',date:'Nov 27',title:'Your own Barcelona day',items:['Shopping: Passeig de Gràcia, Portal de l’Àngel or El Corte Inglés.','Revisit a favourite place, or do Girona as a full-day alternative.','Check in online for Swiss; book the 7:00 Cabify.','Last tapas dinner and pack.'],ids:['girona','pedrera'],note:'Girona is an alternative, not an extra stop to squeeze in.'},
 {key:'Saturday',date:'Nov 28',title:'Fly home',items:['Leave the apartment around 7:00 by pre-booked Cabify.','Reach the airport around 7:30 for the 9:55 Swiss flight.','Follow Bonavista’s key instructions.'],ids:['home'],note:'Confirm terminal and flight details with the airline.'}
 ];
+const DAYS_ES=[
+{key:'Sábado',title:'Llegada y la calle de Gaudí',items:['Aterrizaje a las 9:05 en la Terminal 1; Cabify al apartamento.','Pregunta a Bonavista si puedes dejar las maletas antes.','Paseo tranquilo: La Pedrera y la Casa Batlló por fuera.','Compra tarjetas T-casual y comida para el domingo (la mayoría de las tiendas cierran los domingos).','Cena sencilla y a dormir temprano.'],note:'Haz este día tranquilo después del vuelo.'},
+{key:'Domingo',title:'FC Barcelona vs Villarreal',items:['Desayuno sin prisas y paseo opcional por el barrio de Gràcia.','10:00 · Reserva las franjas gratis del Museo Picasso para el jueves por la tarde.','Comprueba el estadio y la hora del partido en tu entrada.','Llega al menos una hora antes del partido; lleva solo un bolso pequeño.'],note:'El itinerario supone el Camp Nou; sigue el estadio que aparece en tu entrada.'},
+{key:'Lunes',title:'Día de Gaudí y mirador al atardecer',items:['Hacia las 10:00 · Sagrada Família (L5 azul desde Diagonal).','Comida cerca de la basílica, lejos de la plaza principal.','Opcional: Hospital de Sant Pau, si hay energía y tiempo.','Hacia las 14:00 · Park Güell (Cabify, unos 15 min).','Hacia las 16:45 · Bunkers del Carmel para el atardecer; lleva chaqueta.'],note:'Un día completo. Sáltate Sant Pau si complica las entradas con hora.'},
+{key:'Martes',title:'Casco antiguo, mercado y playa',items:['L3 verde desde Diagonal hasta Liceu.','La Boqueria antes del mediodía.','Explora el Barrio Gótico y la catedral.','Pasea por El Born y Santa Maria del Mar.','Comida de paella de marisco y paseo por la playa de la Barceloneta.'],note:'Mantén este día flexible; disfruta perderte por las calles antiguas.'},
+{key:'Miércoles',title:'Tour a Montserrat',items:['Encuentro en la oficina de Castlexperience, Barcelona Nord, Carrer de Nàpols 68 (Cabify, unos 15 min).','Llega 20 minutos antes; confirma el punto de encuentro en tu bono.','Lleva algo de abrigo; en la montaña hace más frío y viento.','Comprueba si tu versión incluye la Moreneta y qué comida.'],note:'Tour de día completo. La hora de regreso depende de la versión reservada.'},
+{key:'Jueves',title:'Montjuïc, velero y Picasso',items:['Mañana · L3 verde hasta Paral·lel, funicular y teleférico hasta el castillo.','Baja a pie por los jardines hasta la terraza del MNAC.','Tarde · Paseo en velero desde Port Vell; termina hacia las 17:00.','Después de las 17:00 · Museo Picasso con tu franja gratis.','Cena de tapas en El Born.'],note:'El paseo en velero debe terminar a tiempo para llegar al museo. Ten a mano la confirmación de la franja gratis.'},
+{key:'Viernes',title:'Tu propio día en Barcelona',items:['Compras: Passeig de Gràcia, Portal de l’Àngel o El Corte Inglés.','Vuelve a un lugar favorito, o haz Girona como alternativa de día completo.','Haz el check-in en línea con Swiss; reserva el Cabify de las 7:00.','Última cena de tapas y hacer las maletas.'],note:'Girona es una alternativa, no una parada extra para meter con calzador.'},
+{key:'Sábado',title:'Vuelta a casa',items:['Sal del apartamento hacia las 7:00 en el Cabify reservado.','Llega al aeropuerto hacia las 7:30 para el vuelo de Swiss de las 9:55.','Sigue las instrucciones de Bonavista para las llaves.'],note:'Confirma la terminal y los datos del vuelo con la aerolínea.'}
+];
+days.forEach((d,i)=>{const e=DAYS_ES[i];d.key_es=e.key;d.title_es=e.title;d.items_es=e.items;d.note_es=e.note;d.date_es=d.date.split(' ')[1]+' nov';});
+const tasks_es=['Reservar Sagrada Família · lun 23 nov hacia las 10:00','Reservar Park Güell · lun 23 nov hacia las 14:00','Reservar tour a Montserrat · mié 25 nov; elegir versión','Reservar paseo en velero al atardecer · jue 26 nov; terminar antes de las 17:00','Pagar la tasa turística de Bonavista · 219,45 € con tarjeta','Preguntar si se pueden dejar las maletas antes','Añadir maletas facturadas a los vuelos','Configurar eSIM en los tres teléfonos','Mirar el pronóstico hacia el 16 nov','Dom 22 nov a las 10:00 · Reservar franjas gratis del Picasso para el jueves','Reservar Cabify para la salida · 28 nov a las 7:00'];
 const tasks=['Book Sagrada Família · Mon Nov 23 around 10:00','Book Park Güell · Mon Nov 23 around 14:00','Book Montserrat tour · Wed Nov 25; choose version','Book sunset sailing · Thu Nov 26; finish by 17:00','Pay Bonavista tourist tax · €219.45 by card','Ask about early luggage drop-off','Add checked bags to flights','Set up eSIMs for all three phones','Check forecast around Nov 16','Sun Nov 22 at 10:00 · Book free Picasso slots for Thursday','Book Cabify for departure · Nov 28 at 7:00'];
 
 /* ---------- Photos (real pictures from Wikipedia, with an icon if none loads) ---------- */
@@ -988,7 +1026,7 @@ function applyPhotos(root){
    img.onload=()=>{
     el.style.backgroundImage=`url("${src}")`;el.classList.add('loaded');
     // Bound on the element itself: Leaflet popups stop clicks from reaching the document
-    el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label','View photo of '+p.name);
+    el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label',t('View photo of ','Ver foto de ')+tr(p,'name'));
     el.onclick=()=>openPhoto(p,src);
     el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPhoto(p,src);}};
    };
@@ -1014,8 +1052,8 @@ function openPhoto(p,src){
  // Wikimedia serves standard sizes; ask for 1280px wide, fall back to the small photo if that fails
  const big=src.replace(/\/\d+px-([^/?]+)/,'/1280px-$1');
  img.onerror=()=>{img.onerror=null;img.src=src;};
- img.src=big;img.alt=p.name;
- document.getElementById('photoName').textContent=p.name;
+ img.src=big;img.alt=tr(p,'name');
+ document.getElementById('photoName').textContent=tr(p,'name');
  document.getElementById('photoCredit').hidden=!!p.noCredit;
  pointers.clear();pinch=null;setZoom(1,0,0);
  document.getElementById('photoBox').hidden=false;document.body.style.overflow='hidden';
@@ -1025,16 +1063,15 @@ function showZTab(id,btn){
  document.querySelectorAll('.zpane').forEach(p=>p.hidden=p.id!==id);
  document.querySelectorAll('.ztabs button').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-selected',b===btn);});
 }
-function openZImg(img){openPhoto({name:img.alt,noCredit:true},img.getAttribute('src'));}
-// English / Español toggle for the Zurich section; remembers the choice on this phone
-function setZLang(lang){
- const sec=document.getElementById('zurich');sec.dataset.lang=lang;
- sec.querySelectorAll('.zlang button').forEach((b,i)=>{const on=(i===0)===(lang==='en');b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});
- sec.querySelectorAll('.zimg').forEach(img=>img.alt=img.dataset[lang]);
- try{localStorage.setItem('zLang',lang);}catch(e){}
+// Opens a Zurich SVG map in the photo viewer (as a data URL, so no network needed), keeping only the current language's labels
+function openZMap(svg){
+ const el=svg.cloneNode(true);
+ el.querySelectorAll('[lang]').forEach(n=>{if(n.getAttribute('lang')!==LANG)n.remove();});
+ const vb=el.viewBox.baseVal;el.setAttribute('width',vb.width);el.setAttribute('height',vb.height); // a viewBox-only SVG would show at a small default size
+ const src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(el));
+ openPhoto({name:svg.dataset[LANG],noCredit:true},src);
 }
-try{if(localStorage.getItem('zLang')==='es')setZLang('es');}catch(e){}
-// Save the page and both Zurich gate maps on the phone for offline use (needs the https:// GitHub Pages address)
+// Save the page on the phone (the Zurich maps are built in) for offline use (needs the https:// GitHub Pages address)
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 function closePhoto(){
  document.getElementById('photoBox').hidden=true;document.getElementById('photoImg').removeAttribute('src');
@@ -1071,17 +1108,21 @@ function closePhoto(){
 })();
 
 /* ---------- Map ---------- */
-let map=null,markers={},start=home,startName='Apartment',routeLayers=[];
+let map=null,markers={},start=home,routeLayers=[];
+const startLabel=()=>start===home?t('Apartment','Apartamento'):t('My current location','Mi ubicación actual');
+// Location messages are kept as functions so they can be re-shown in the other language
+let lastStatus=null;
+function setStatus(fn){lastStatus=fn;document.getElementById('locationStatus').textContent=fn();}
 // Google Maps page for a shop: searches the shop's name at the pin's own coordinates (not an address),
 // so Google opens the store at that spot with its current rating, reviews and photos (no API key needed)
 function reviewsUrl(p){return `https://www.google.com/maps/search/${encodeURIComponent(p.gname)}/@${p.lat},${p.lon},20z`;}
-function reviewsLink(p,style){return p.shop?`<a class="btnlink" style="${style||''}" target="_blank" rel="noopener" href="${reviewsUrl(p)}">⭐ Photos & reviews on Google ↗</a>`:'';}
+function reviewsLink(p,style){return p.shop?`<a class="btnlink" style="${style||''}" target="_blank" rel="noopener" href="${reviewsUrl(p)}">⭐ ${t('Photos & reviews on Google','Fotos y reseñas en Google')} ↗</a>`:'';}
 function popupHtml(p){
- return `<div class="pthumb" data-photo="${p.id}"></div><b>${p.name}</b><br>${p.desc}<br><button style="margin-top:6px;padding:6px 9px;font-size:12px" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">Route here</button>${p.shop?'<br>'+reviewsLink(p,'margin-top:6px;padding:6px 9px;font-size:12px'):''}`;
+ return `<div class="pthumb" data-photo="${p.id}"></div><b>${tr(p,'name')}</b><br>${tr(p,'desc')}<br><button style="margin-top:6px;padding:6px 9px;font-size:12px" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">${t('Route here','Ruta hasta aquí')}</button>${p.shop?'<br>'+reviewsLink(p,'margin-top:6px;padding:6px 9px;font-size:12px'):''}`;
 }
 function initMap(){
  if(typeof L==='undefined'){
-  document.getElementById('map').innerHTML='<div style="padding:20px" class="small">The map could not start. Your day plans and Google Maps links below still work.</div>';
+  document.getElementById('map').innerHTML='<div style="padding:20px" class="small">'+t('The map could not start. Your day plans and Google Maps links below still work.','El mapa no pudo iniciarse. Tus planes por día y los enlaces de Google Maps de abajo siguen funcionando.')+'</div>';
   fillSelect();return;
  }
  L.Icon.Default.mergeOptions({iconUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAApCAYAAADAk4LOAAAFgUlEQVR4Aa1XA5BjWRTN2oW17d3YaZtr2962HUzbDNpjszW24mRt28p47v7zq/bXZtrp/lWnXr337j3nPCe85NcypgSFdugCpW5YoDAMRaIMqRi6aKq5E3YqDQO3qAwjVWrD8Ncq/RBpykd8oZUb/kaJutow8r1aP9II0WmLKLIsJyv1w/kqw9Ch2MYdB++12Onxee/QMwvf4/Dk/Lfp/i4nxTXtOoQ4pW5Aj7wpici1A9erdAN2OH64x8OSP9j3Ft3b7aWkTg/Fm91siTra0f9on5sQr9INejH6CUUUpavjFNq1B+Oadhxmnfa8RfEmN8VNAsQhPqF55xHkMzz3jSmChWU6f7/XZKNH+9+hBLOHYozuKQPxyMPUKkrX/K0uWnfFaJGS1QPRtZsOPtr3NsW0uyh6NNCOkU3Yz+bXbT3I8G3xE5EXLXtCXbbqwCO9zPQYPRTZ5vIDXD7U+w7rFDEoUUf7ibHIR4y6bLVPXrz8JVZEql13trxwue/uDivd3fkWRbS6/IA2bID4uk0UpF1N8qLlbBlXs4Ee7HLTfV1j54APvODnSfOWBqtKVvjgLKzF5YdEk5ewRkGlK0i33Eofffc7HT56jD7/6U+qH3Cx7SBLNntH5YIPvODnyfIXZYRVDPqgHtLs5ABHD3YzLuespb7t79FY34DjMwrVrcTuwlT55YMPvOBnRrJ4VXTdNnYug5ucHLBjEpt30701A3Ts+HEa73u6dT3FNWwflY86eMHPk+Yu+i6pzUpRrW7SNDg5JHR4KapmM5Wv2E8Tfcb1HoqqHMHU+uWDD7zg54mz5/2BSnizi9T1Dg4QQXLToGNCkb6tb1NU+QAlGr1++eADrzhn/u8Q2YZhQVlZ5+CAOtqfbhmaUCS1ezNFVm2imDbPmPng5wmz+gwh+oHDce0eUtQ6OGDIyR0uUhUsoO3vfDmmgOezH0mZN59x7MBi++WDL1g/eEiU3avlidO671bkLfwbw5XV2P8Pzo0ydy4t2/0eu33xYSOMOD8hTf4CrBtGMSoXfPLchX+J0ruSePw3LZeK0juPJbYzrhkH0io7B3k164hiGvawhOKMLkrQLyVpZg8rHFW7E2uHOL888IBPlNZ1FPzstSJM694fWr6RwpvcJK60+0HCILTBzZLFNdtAzJaohze60T8qBzyh5ZuOg5e7uwQppofEmf2++DYvmySqGBuKaicF1blQjhuHdvCIMvp8whTTfZzI7RldpwtSzL+F1+wkdZ2TBOW2gIF88PBTzD/gpeREAMEbxnJcaJHNHrpzji0gQCS6hdkEeYt9DF/2qPcEC8RM28Hwmr3sdNyht00byAut2k3gufWNtgtOEOFGUwcXWNDbdNbpgBGxEvKkOQsxivJx33iow0Vw5S6SVTrpVq11ysA2Rp7gTfPfktc6zhtXBBC+adRLshf6sG2RfHPZ5EAc4sVZ83yCN00Fk/4kggu40ZTvIEm5g24qtU4KjBrx/BTTH8ifVASAG7gKrnWxJDcU7x8X6Ecczhm3o6YicvsLXWfh3Ch1W0k8x0nXF+0fFxgt4phz8QvypiwCCFKMqXCnqXExjq10beH+UUA7+nG6mdG/Pu0f3LgFcGrl2s0kNNjpmoJ9o4B29CMO8dMT4Q5ox8uitF6fqsrJOr8qnwNbRzv6hSnG5wP+64C7h9lp30hKNtKdWjtdkbuPA19nJ7Tz3zR/ibgARbhb4AlhavcBebmTHcFl2fvYEnW0ox9xMxKBS8btJ+KiEbq9zA4RthQXDhPa0T9TEe69gWupwc6uBUphquXgf+/FrIjweHQS4/pduMe5ERUMHUd9xv8ZR98CxkS4F2n3EUrUZ10EYNw7BWm9x1GiPssi3GgiGRDKWRYZfXlON+dfNbM+GgIwYdwAAAAASUVORK5CYII=',iconRetinaUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAABSCAMAAAAhFXfZAAAC91BMVEVMaXEzeak2f7I4g7g3g7cua5gzeKg8hJo3grY4g7c3grU0gLI2frE0daAubJc2gbQwd6QzeKk2gLMtd5sxdKIua5g1frA2f7IydaM0e6w2fq41fK01eqo3grgubJgta5cxdKI1f7AydaQydaMxc6EubJgvbJkwcZ4ubZkwcJwubZgubJcydqUydKIxapgubJctbJcubZcubJcvbJYubJcvbZkubJctbJctbZcubJg2f7AubJcrbZcubJcubJcua5g3grY0fq8ubJcubJdEkdEwhsw6i88vhswuhcsuhMtBjMgthMsrg8srgss6is8qgcs8i9A9iMYtg8spgcoogMo7hcMngMonf8olfso4gr8kfck5iM8jfMk4iM8he8k1fro7itAgesk2hs8eecgzfLcofssdeMg0hc4cd8g2hcsxeLQbdsgZdcgxeLImfcszhM0vda4xgckzhM4xg84wf8Yxgs4udKsvfcQucqhUndROmdM1fK0wcZ8vb5w0eqpQm9MzeKhXoNVcpdYydKNWn9VZotVKltJFjsIwcJ1Rms9OlslLmtH///8+kc9epdYzd6dbo9VHkMM2f7FHmNBClM8ydqVcpNY9hro3gLM9hLczealQmcw3fa46f7A8gLMxc6I3eagyc6FIldJMl9JSnNRSntNNl9JPnNJFi75UnM9ZodVKksg8kM45jc09e6ZHltFBk883gbRBh7pDk9EwcaBzn784g7dKkcY2i81Om9M7j85Llc81is09g7Q4grY/j9A0eqxKmdFFltBEjcXf6fFImdBCiLxJl9FGlNFBi78yiMxVndEvbpo6js74+vx+psPP3+o/ks5HkcpGmNCjwdZCkNDM3ehYoNJEls+lxNkxh8xHks0+jdC1zd5Lg6r+/v/H2ufz9/o3jM3t8/edvdM/k89Th61OiLBSjbZklbaTt9BfptdjmL1AicBHj8hGk9FAgK1dkLNTjLRekrdClc/k7fM0icy0y9tgp9c4jc2NtM9Dlc8zicxeXZn3AAAAQ3RSTlMAHDdTb4yPA+LtnEQmC4L2EmHqB7XA0d0sr478x4/Yd5i1zOfyPkf1sLVq4Nh3FvjxopQ2/STNuFzUwFIwxKaejILpIBEV9wAABhVJREFUeF6s1NdyFEcYBeBeoQIhRAkLlRDGrhIgY3BJL8CVeKzuyXFzzjkn5ZxzzuScg3PO8cKzu70JkO0LfxdTU//pM9vTu7Xgf6KqOVTb9X7toRrVEfBf1HTVjZccrT/2by1VV928Yty9ZbVuucdz90frG8DBjl9pVApbOstvmMuvVgaNXSfAAd6pGxpy6yxf5ph43pS/4f3uoaGm2rdu72S9xzOvMymkZFq/ptDrk90mhW7e4zl7HLzhxGWPR20xmSxJ/VqldG5m9XhaVOA1DadsNh3Pu5L2N6QtPO/32JpqQBVVk20oy/Pi2s23WEvyfHbe1thadVQttvm7Llf65gGmXK67XtupyoM7HQhmXdLS8oGWJNeOJ3C5fG5XCEJnkez3/oFdsvgJ4l2ANZwhrJKk/7OSXa+3Vw2WJMlKnGkobouYk6T0TyX30klOUnTD9HJ5qpckL3EW/w4XF3Xd0FGywXUrstrclVsqz5Pd/sXFYyDnPdrLcQODmGOK47IZb4CmibmMn+MYRzFZ5jg33ZL/EJrWcszHmANy3ARBK/IXtciJy8VsitPSdE3uuHxzougojcUdr8/32atnz/ev3f/K5wtpxUTpcaI45zusVDpYtZi+jg0oU9b3x74h7+n9ABvYEZeKaVq0sh0AtLKsFtqNBdeT0MrSzwwlq9+x6xAO4tgOtSzbCjrNQQiNvQUbUEubvzBUeGw26yDCsRHCoLkTHDa7IdOLIThs/gHvChszh2CimE8peRs47cxANI0lYNB5y1DljpOF0IhzBDPOZnDOqYYbeGKECbPzWnXludPphw5c2YBq5zlwXphIbO4VDCZ0gnPfUO1TwZoYwAs2ExPCedAu9DAjfQUjzITQb3jNj0KG2Sgt6BHaQUdYzWz+XmBktOHwanXjaSTcwwziBcuMOtwBmqPrTOxFQR/DRKKPqyur0aiW6cULYsx6tBm0jXpR/AUWR6HRq9WVW6MRhIq5jLyjbaCTDCijyYJNpCajdyobP/eTw0iexBAKkJ3gA5KcQb2zBXsIBckn+xVv8jkZSaEFHE+jFEleAEfayRU0MouNoBmB/L50Ai/HSLIHxcrpCvnhSQAuakKp2C/YbCylJjXRVy/z3+Kv/RrNcCo+WUzlVEhzKffnTQnxeN9fWF88fiNCUdSTsaufaChKWInHeysygfpIqagoakW+vV20J8uyl6TyNKEZWV4oRSPyCkWpgOLSbkCObT8o2r6tlG58HQquf6O0v50tB7JM7F4EORd2dx/K0w/KHsVkLPaoYrwgP/y7krr3SSMA4zj+OBgmjYkxcdIJQyQRKgg2viX9Hddi9UBb29LrKR7CVVEEEXWojUkXNyfTNDE14W9gbHJNuhjDettN3ZvbOvdOqCD3Jp/9l+/wJE+9PkYGjx/fqkys3S2rMozM/o2106rfMUINo6hVqz+eu/hd1c4xTg0TAfy5kV+4UG6+IthHTU9woWmxuKNbTfuCSfovBCxq7EtHqvYL4Sm6F8GVxsSXHMQ07TOi1DKtZxjWaaIyi4CXWjxPccUw8WVbMYY5wxC1mzEyXMJWkllpRloi+Kkoq69sxBTlElF6aAxYUbjXNlhlDZilDnM4U5SlN5biRsRHnbx3mbeWjEh4mEyiuJDl5XcWVmX5GvNkFgLWZM5qwsop4/AWfLhU1cR7k1VVvcYCWRkOI6Xy5gmnphCYIkvzuNYzHzosq2oNk2RtSs8khfUOfHIDgR6ysYBaMpl4uEgk2U/oJTs9AaTSwma7dT69geAE2ZpEjUsn2ieJNHeKfrI3EcAGJ2ZaNgVuC8EBctCLc57P5u5led6IOBkIYkuQMrmmjChs4VkfOerHqSBkPzZlhe06RslZ3zMjk2sscqKwY0RcjKK+LWbzd7KiHhkncs/siFJ+V5eXxD34B8nVuJEpGJNmxN2gH3vSvp7J70tF+D1Ej8qUJD1TkErAND2GZwTFg/LubvmgiBG3SOvdlsqFQrkEzJCL1rstlnVFROixZoDDSuXQFHESwVGlcuQcMb/b42NgjLowh5MTDFE3vNB5qStRIErdCQEh6pLPR92anSUb/wAIhldAaDMpGgAAAABJRU5ErkJggg==',shadowUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAQAAAACach9AAACMUlEQVR4Ae3ShY7jQBAE0Aoz/f9/HTMzhg1zrdKUrJbdx+Kd2nD8VNudfsL/Th///dyQN2TH6f3y/BGpC379rV+S+qqetBOxImNQXL8JCAr2V4iMQXHGNJxeCfZXhSRBcQMfvkOWUdtfzlLgAENmZDcmo2TVmt8OSM2eXxBp3DjHSMFutqS7SbmemzBiR+xpKCNUIRkdkkYxhAkyGoBvyQFEJEefwSmmvBfJuJ6aKqKWnAkvGZOaZXTUgFqYULWNSHUckZuR1HIIimUExutRxwzOLROIG4vKmCKQt364mIlhSyzAf1m9lHZHJZrlAOMMztRRiKimp/rpdJDc9Awry5xTZCte7FHtuS8wJgeYGrex28xNTd086Dik7vUMscQOa8y4DoGtCCSkAKlNwpgNtphjrC6MIHUkR6YWxxs6Sc5xqn222mmCRFzIt8lEdKx+ikCtg91qS2WpwVfBelJCiQJwvzixfI9cxZQWgiSJelKnwBElKYtDOb2MFbhmUigbReQBV0Cg4+qMXSxXSyGUn4UbF8l+7qdSGnTC0XLCmahIgUHLhLOhpVCtw4CzYXvLQWQbJNmxoCsOKAxSgBJno75avolkRw8iIAFcsdc02e9iyCd8tHwmeSSoKTowIgvscSGZUOA7PuCN5b2BX9mQM7S0wYhMNU74zgsPBj3HU7wguAfnxxjFQGBE6pwN+GjME9zHY7zGp8wVxMShYX9NXvEWD3HbwJf4giO4CFIQxXScH1/TM+04kkBiAAAAAElFTkSuQmCC'});
@@ -1092,26 +1133,26 @@ function initMap(){
   const icon=p.shop?L.divIcon({className:'shopPin',html:p.icon,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-14]})
    :p.id==='home'?L.divIcon({className:'homePin',html:'🏠',iconSize:[40,40],iconAnchor:[20,20],popupAnchor:[0,-18]}):undefined;
   const m=L.marker([p.lat,p.lon],icon?{icon,zIndexOffset:p.id==='home'?1000:0}:{}).addTo(map).bindPopup(popupHtml(p),{maxWidth:240});
-  if(p.id==='home')m.bindTooltip('Your apartment',{permanent:true,direction:'right',offset:[18,0],className:'homeLabel'});
+  if(p.id==='home')m.bindTooltip(t('Your apartment','Tu apartamento'),{permanent:true,direction:'right',offset:[18,0],className:'homeLabel'});
   m.on('popupopen',e=>applyPhotos(e.popup.getElement()));
   markers[p.id]=m;
  });
  fillSelect();showAll();
 }
-function fillSelect(){const s=document.getElementById('destination');s.innerHTML=places.filter(p=>p.id!=='home').map(p=>`<option value="${p.id}">${p.name}</option>`).join('');}
+function fillSelect(){const s=document.getElementById('destination'),v=s.value;s.innerHTML=places.filter(p=>p.id!=='home').map(p=>`<option value="${p.id}">${tr(p,'name')}</option>`).join('');if(v)s.value=v;}
 function selectPlace(id){const p=places.find(x=>x.id===id);if(!p)return;if(id!=='home')document.getElementById('destination').value=id;if(map){map.setView([p.lat,p.lon],15);markers[id].openPopup();document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});}}
 function showAll(){if(!map)return;const group=L.featureGroup(Object.values(markers));map.fitBounds(group.getBounds().pad(.12));}
-function goHome(){start=home;startName='Apartment';if(map)map.setView(home,14);document.getElementById('locationStatus').textContent='Starting from Bonavista apartment.';}
+function goHome(){start=home;if(map)map.setView(home,14);setStatus(()=>t('Starting from Bonavista apartment.','Saliendo del apartamento Bonavista.'));}
 function useGPS(){
- const status=document.getElementById('locationStatus');
- if(!navigator.geolocation){status.textContent='Location is not available in this browser.';return;}
- if(!window.isSecureContext){status.textContent='Location only works when this page is opened from an https:// address (see the note at the bottom). Using the apartment as your start.';return;}
- status.textContent='Requesting your location…';
+ if(!navigator.geolocation){setStatus(()=>t('Location is not available in this browser.','La ubicación no está disponible en este navegador.'));return;}
+ if(!window.isSecureContext){setStatus(()=>t('Location only works when this page is opened from an https:// address (see the note at the bottom). Using the apartment as your start.','La ubicación solo funciona si abres esta página desde una dirección https:// (ver la nota al final). Usamos el apartamento como punto de partida.'));return;}
+ setStatus(()=>t('Requesting your location…','Pidiendo tu ubicación…'));
  navigator.geolocation.getCurrentPosition(pos=>{
-  start=[pos.coords.latitude,pos.coords.longitude];startName='My current location';
-  if(map){map.setView(start,15);L.circleMarker(start,{radius:9,color:'#173b35',fillColor:'#d9a85b',fillOpacity:1}).addTo(map).bindPopup('You are here').openPopup();}
-  status.textContent='Using your current location for directions. Accuracy ±'+Math.round(pos.coords.accuracy)+' m.';
- },()=>{status.textContent='Could not access location. Allow location permission, or use the apartment as your start.';},{enableHighAccuracy:true,timeout:10000});
+  start=[pos.coords.latitude,pos.coords.longitude];
+  if(map){map.setView(start,15);L.circleMarker(start,{radius:9,color:'#173b35',fillColor:'#d9a85b',fillOpacity:1}).addTo(map).bindPopup(t('You are here','Estás aquí')).openPopup();}
+  const acc=Math.round(pos.coords.accuracy);
+  setStatus(()=>t('Using your current location for directions. Accuracy ±','Usando tu ubicación actual para las rutas. Precisión ±')+acc+' m.');
+ },()=>{setStatus(()=>t('Could not access location. Allow location permission, or use the apartment as your start.','No se pudo acceder a la ubicación. Permite el acceso a la ubicación o usa el apartamento como punto de partida.'));},{enableHighAccuracy:true,timeout:10000});
 }
 
 /* ---------- Routes ---------- */
@@ -1161,13 +1202,14 @@ function routeLegName(leg){
  const mode=(leg.mode||leg.transportMode||'').toString().toUpperCase();
  const route=leg.routeShortName||leg.routeName||leg.shortName||'';
  const head=leg.headsign||'';
- if(mode.includes('SUBWAY')||mode.includes('METRO'))return `Metro ${route?route+' ':''}${head?'towards '+head:''}`.trim();
- if(mode.includes('BUS'))return `Bus ${route?route+' ':''}${head?'towards '+head:''}`.trim();
- if(mode.includes('TRAM'))return `Tram ${route?route+' ':''}${head?'towards '+head:''}`.trim();
- if(mode.includes('RAIL')||mode.includes('REGIONAL')||mode.includes('SUBURBAN'))return `Train ${route?route+' ':''}${head?'towards '+head:''}`.trim();
- if(mode.includes('WALK')||mode==='FOOT')return `Walk · ${Math.max(1,Math.round((leg.duration||0)/60))} min`;
- if(mode.includes('CAR'))return `Taxi / car · ${Math.max(1,Math.round((leg.duration||0)/60))} min`;
- return `${mode||'Travel'} ${route}`.trim();
+ const tw=head?t('towards ','dirección ')+head:'';
+ if(mode.includes('SUBWAY')||mode.includes('METRO'))return `Metro ${route?route+' ':''}${tw}`.trim();
+ if(mode.includes('BUS'))return `Bus ${route?route+' ':''}${tw}`.trim();
+ if(mode.includes('TRAM'))return `Tram ${route?route+' ':''}${tw}`.trim();
+ if(mode.includes('RAIL')||mode.includes('REGIONAL')||mode.includes('SUBURBAN'))return `${t('Train','Tren')} ${route?route+' ':''}${tw}`.trim();
+ if(mode.includes('WALK')||mode==='FOOT')return `${t('Walk','A pie')} · ${Math.max(1,Math.round((leg.duration||0)/60))} min`;
+ if(mode.includes('CAR'))return `${t('Taxi / car','Taxi / coche')} · ${Math.max(1,Math.round((leg.duration||0)/60))} min`;
+ return `${mode||t('Travel','Trayecto')} ${route}`.trim();
 }
 function formatDuration(seconds){const m=Math.max(1,Math.round((seconds||0)/60));return m>=60?`${Math.floor(m/60)} h ${m%60} min`:`${m} min`;}
 function drawLegs(legs,mode){
@@ -1193,24 +1235,34 @@ function renderRouteChoices(data,mode){
   const card=document.createElement('div');
   card.style.cssText='border:1px solid #e4e8e5;border-radius:10px;padding:9px;margin-top:7px;background:#fff';
   const head=document.createElement('div');head.style.cssText='font-weight:700;margin-bottom:5px';
-  head.textContent=`Option ${i+1} · ${formatDuration(total)}`;card.appendChild(head);
+  head.textContent=`${t('Option','Opción')} ${i+1} · ${formatDuration(total)}`;card.appendChild(head);
   legs.forEach(leg=>{
    const line=document.createElement('div');line.style.cssText='font-size:13px;padding:3px 0;color:#34433e';
-   const nm=n=>n==='START'?startName:n==='END'?(window.currentDest||'Destination'):n;
+   const nm=n=>n==='START'?startLabel():n==='END'?(window.currentDest||t('Destination','Destino')):n;
    const from=nm(leg.from?.name||''),to=nm(leg.to?.name||'');
    line.textContent=`${routeLegName(leg)}${from||to?' — '+from+(to?' → '+to:''):''}`;
    card.appendChild(line);
   });
   const btn=document.createElement('button');btn.className='secondary';btn.style.cssText='margin-top:6px;padding:6px 9px';
-  btn.textContent='Show this option on map';btn.onclick=()=>drawLegs(legs,mode);
+  btn.textContent=t('Show this option on map','Ver esta opción en el mapa');btn.onclick=()=>drawLegs(legs,mode);
   card.appendChild(btn);options.appendChild(card);
   if(i===0)drawLegs(legs,mode);
  });
 }
 /* Walking / taxi: OpenStreetMap routing (FOSSGIS servers), drawn on our map with turn-by-turn steps */
 function stepText(s){
- const m=s.maneuver||{},road=s.name?` onto ${s.name}`:'';
+ const m=s.maneuver||{};
  const dist=s.distance>=1000?(s.distance/1000).toFixed(1)+' km':Math.round(s.distance)+' m';
+ if(LANG==='es'){
+  const road=s.name?` por ${s.name}`:'';
+  if(m.type==='depart')return `Empieza${s.name?' en '+s.name:''}`;
+  if(m.type==='arrive')return 'Llegas a tu destino';
+  const mods={left:'a la izquierda',right:'a la derecha','slight left':'ligeramente a la izquierda','slight right':'ligeramente a la derecha','sharp left':'cerrado a la izquierda','sharp right':'cerrado a la derecha',straight:'recto'};
+  const mod=mods[m.modifier]||'';
+  const verb=m.modifier==='uturn'?'Cambia de sentido':m.type==='turn'||m.type==='end of road'||m.type==='fork'?`Gira ${mod||'recto'}`:m.type==='roundabout'||m.type==='rotary'?'Toma la rotonda':`Sigue ${mod||'recto'}`;
+  return `${verb}${road} · ${dist}`;
+ }
+ const road=s.name?` onto ${s.name}`:'';
  if(m.type==='depart')return `Start${s.name?' on '+s.name:''}`;
  if(m.type==='arrive')return 'Arrive at your destination';
  const turn=m.modifier?m.modifier.replace('uturn','U-turn'):'continue';
@@ -1228,7 +1280,7 @@ async function streetRoute(mode,p){
  map.fitBounds(L.featureGroup(routeLayers).getBounds().pad(.18));
  const km=(rt.distance/1000).toFixed(1);
  const steps=(rt.legs[0]?.steps||[]).filter(s=>s.distance>15||['depart','arrive'].includes(s.maneuver?.type)).slice(0,25);
- const extra=mode==='driving'?' (taxi time, before traffic)':'';
+ const extra=mode==='driving'?t(' (taxi time, before traffic)',' (tiempo en taxi, sin contar el tráfico)'):'';
  document.getElementById('routeOptions').innerHTML=`<div style="border:1px solid #e4e8e5;border-radius:10px;padding:9px;background:#fff"><b>${formatDuration(rt.duration)} · ${km} km${extra}</b><ol style="margin:6px 0 0;padding-left:20px;font-size:13px;color:#34433e">${steps.map(s=>`<li style="margin:3px 0">${stepText(s)}</li>`).join('')}</ol></div>`;
 }
 /* Public transport: Transitous (MOTIS API v6, then v5) */
@@ -1247,7 +1299,7 @@ async function transitRoute(p){
 /* Google directions panel, using Google's no-key embed link */
 function googleEmbedUrl(mode,p){
  const flag={transit:'r',walking:'w',driving:'d'}[mode]||'r';
- return `https://maps.google.com/maps?saddr=${googleStart()}&daddr=${p.lat},${p.lon}&dirflg=${flag}&hl=en&output=embed`;
+ return `https://maps.google.com/maps?saddr=${googleStart()}&daddr=${p.lat},${p.lon}&dirflg=${flag}&hl=${LANG}&output=embed`;
 }
 function openGooglePanel(mode,title,p){
  document.getElementById('gTitle').textContent=title;
@@ -1264,67 +1316,82 @@ function closeGooglePanel(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('gPanel').hidden)closeGooglePanel();});
 async function directions(mode){
  const p=places.find(x=>x.id===document.getElementById('destination').value);if(!p)return;
- clearRoute();window.currentDest=p.name;
- const labels={transit:'Public transport',walking:'Walking',driving:'Taxi / car'};
+ const pn=tr(p,'name');clearRoute();window.currentDest=pn;
+ const labels={transit:t('Public transport','Transporte público'),walking:t('Walking','A pie'),driving:t('Taxi / car','Taxi / coche')};
+ const from=t('From ','Desde ')+startLabel();
  document.getElementById('routeResults').style.display='block';
- document.getElementById('routeTitle').textContent=`${labels[mode]} · ${p.name}`;
- document.getElementById('routeSubtitle').textContent=`From ${startName} · Calculating route…`;
- document.getElementById('routeOptions').textContent='Finding the best route…';
+ document.getElementById('routeTitle').textContent=`${labels[mode]} · ${pn}`;
+ document.getElementById('routeSubtitle').textContent=`${from} · ${t('Calculating route…','Calculando la ruta…')}`;
+ document.getElementById('routeOptions').textContent=t('Finding the best route…','Buscando la mejor ruta…');
  // Standard Google Maps directions link: opens the Google Maps app on phones, no API key needed
- document.getElementById('routeBackup').innerHTML=`<a class="btnlink" target="_blank" rel="noopener" href="${gmapsUrl(mode,p)}">Open in Google Maps ↗</a>`;
- openGooglePanel(mode,`${labels[mode]} · ${p.name}`,p);
+ document.getElementById('routeBackup').innerHTML=`<a class="btnlink" target="_blank" rel="noopener" href="${gmapsUrl(mode,p)}">${t('Open in Google Maps','Abrir en Google Maps')} ↗</a>`;
+ openGooglePanel(mode,`${labels[mode]} · ${pn}`,p);
  document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});
- if(!map){document.getElementById('routeOptions').textContent='The map could not load. Use “Open in Google Maps” below.';return;}
+ if(!map){document.getElementById('routeOptions').textContent=t('The map could not load. Use “Open in Google Maps” below.','El mapa no pudo cargar. Usa “Abrir en Google Maps” abajo.');return;}
  try{
   if(mode==='transit')await transitRoute(p);else await streetRoute(mode,p);
-  document.getElementById('routeSubtitle').textContent=`From ${startName} · Route drawn on the map`;
+  document.getElementById('routeSubtitle').textContent=`${from} · ${t('Route drawn on the map','Ruta dibujada en el mapa')}`;
  }catch(err){
-  document.getElementById('routeSubtitle').textContent=`From ${startName} · No route drawn`;
-  document.getElementById('routeOptions').innerHTML=`<span class="small">Our route service couldn't plan this trip (${err.message}). Tap “Open in Google Maps” below for directions.</span>`;
+  document.getElementById('routeSubtitle').textContent=`${from} · ${t('No route drawn','No se dibujó ninguna ruta')}`;
+  document.getElementById('routeOptions').innerHTML=`<span class="small">${t(`Our route service couldn't plan this trip (${err.message}). Tap “Open in Google Maps” below for directions.`,`Nuestro servicio de rutas no pudo planear este trayecto (${err.message}). Toca “Abrir en Google Maps” abajo para ver indicaciones.`)}</span>`;
  }
 }
 
 /* ---------- Day plans ---------- */
 function stopCard(id){
  const p=places.find(x=>x.id===id);if(!p)return '';
- return `<div class="stop"><div class="thumb" data-photo="${p.id}"><span>${p.icon}</span></div><div><h3>${p.name}</h3><p>${p.desc}</p><div class="actions"><button class="secondary" onclick="selectPlace('${p.id}')">On map</button><button class="secondary" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">Directions</button>${reviewsLink(p)}</div></div></div>`;
+ return `<div class="stop"><div class="thumb" data-photo="${p.id}"><span>${p.icon}</span></div><div><h3>${tr(p,'name')}</h3><p>${tr(p,'desc')}</p><div class="actions"><button class="secondary" onclick="selectPlace('${p.id}')">${t('On map','En el mapa')}</button><button class="secondary" onclick="selectPlace('${p.id}');directions('${p.shop?'walking':'transit'}')">${t('Directions','Cómo llegar')}</button>${reviewsLink(p)}</div></div></div>`;
 }
-function renderDays(){const tabs=document.getElementById('dayTabs');tabs.innerHTML=days.map((d,i)=>`<button class="${i===0?'active':''}" onclick="showDay(${i},this)">${d.key.slice(0,3)} ${d.date.split(' ')[1]}</button>`).join('');showDay(0,tabs.children[0]);}
+let curDay=0;
+function renderDays(){const tabs=document.getElementById('dayTabs');tabs.innerHTML=days.map((d,i)=>`<button class="${i===curDay?'active':''}" onclick="showDay(${i},this)">${tr(d,'key').slice(0,3)} ${d.date.split(' ')[1]}</button>`).join('');showDay(curDay,tabs.children[curDay]);}
 function showDay(i,btn){
+ curDay=i;
  document.querySelectorAll('#dayTabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
  const d=days[i];
- const html=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap"><div><div class="pill">${d.key} · ${d.date}</div><h2 style="margin:7px 0">${d.title}</h2></div><button class="secondary" onclick="focusDay(${i})">Show day on map</button></div>
- <div class="daygrid"><div><ol>${d.items.map(x=>`<li style="margin:7px 0">${x}</li>`).join('')}</ol><p class="small">${d.note}</p></div><div>${d.ids.map(stopCard).join('')}</div></div>`;
+ const html=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:start;flex-wrap:wrap"><div><div class="pill">${tr(d,'key')} · ${tr(d,'date')}</div><h2 style="margin:7px 0">${tr(d,'title')}</h2></div><button class="secondary" onclick="focusDay(${i})">${t('Show day on map','Ver el día en el mapa')}</button></div>
+ <div class="daygrid"><div><ol>${tr(d,'items').map(x=>`<li style="margin:7px 0">${x}</li>`).join('')}</ol><p class="small">${tr(d,'note')}</p></div><div>${d.ids.map(stopCard).join('')}</div></div>`;
  const box=document.getElementById('dayContent');box.innerHTML=html;applyPhotos(box);
 }
 function focusDay(i){if(!map)return;const ps=days[i].ids.map(id=>places.find(p=>p.id===id)).filter(Boolean);if(ps.length){map.fitBounds(L.latLngBounds(ps.map(p=>[p.lat,p.lon])).pad(.25));document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});}}
 
 /* ---------- Checklist ---------- */
-function renderTasks(){document.getElementById('todo').innerHTML=tasks.map((t,i)=>`<label><input type="checkbox" onchange="saveTask(${i},this.checked)" id="task${i}"><span>${t}</span></label>`).join('');try{const saved=JSON.parse(localStorage.getItem('barcelonaTasks13')||'[]');saved.forEach(i=>{const e=document.getElementById('task'+i);if(e)e.checked=true;});}catch(e){}}
+function renderTasks(){document.getElementById('todo').innerHTML=(LANG==='es'?tasks_es:tasks).map((t,i)=>`<label><input type="checkbox" onchange="saveTask(${i},this.checked)" id="task${i}"><span>${t}</span></label>`).join('');try{const saved=JSON.parse(localStorage.getItem('barcelonaTasks13')||'[]');saved.forEach(i=>{const e=document.getElementById('task'+i);if(e)e.checked=true;});}catch(e){}}
 function saveTask(i,v){let a=[];try{a=JSON.parse(localStorage.getItem('barcelonaTasks13')||'[]')}catch(e){};a=v?[...new Set([...a,i])]:a.filter(x=>x!==i);try{localStorage.setItem('barcelonaTasks13',JSON.stringify(a))}catch(e){}}
 
 /* ---------- Companion (built-in tips; most specific topics are checked first) ---------- */
 function addMsg(txt,cls){const d=document.createElement('div');d.className='msg '+cls;d.textContent=txt;const box=document.getElementById('messages');box.appendChild(d);box.scrollTop=box.scrollHeight;}
 function guideAnswer(q){const s=q.toLowerCase();
 const has=(...w)=>w.some(x=>s.includes(x));
-if(has('near','nearby','around'))return 'Near Park Güell: the Bunkers del Carmel viewpoint (about 10 min by Cabify) for sunset, and the Gràcia neighbourhood below for cafés and tapas. Near Sagrada Família: Hospital de Sant Pau, 10 minutes up Avinguda de Gaudí. Near the Picasso Museum: Santa Maria del Mar and the El Born tapas streets.';
-if(has('montserrat'))return 'Montserrat is Wednesday. Meet at the Castlexperience office (pink) at Barcelona Nord, Carrer de Nàpols 68, 20 minutes early — about 15 min by Cabify from the apartment. Bring a warm layer and check your voucher for the version, lunch and return time.';
-if(has('sagrada'))return 'From the apartment, walk about 10 minutes to Diagonal and take the blue L5 three stops to Sagrada Família (about 10 minutes). Bring your passport: tickets carry your name. Or tap Public transport on the map panel.';
-if(has('park güell','park guell','guell'))return 'Park Güell is uphill. From Sagrada Família, a Cabify takes about 15 minutes (around €10 for three). Your Monumental Zone slot is timed; in November the last entry is around 17:00.';
-if(has('picasso'))return 'Picasso Museum is free on Thursdays after 17:00, but you need a free slot booked online. Slots come out four days ahead, so book on Sunday morning. Without one it costs €14.';
-if(has('airport','flight','cabify','taxi'))return 'Airport: Cabify or FreeNow, about €28–35 for the car, split three ways. Leaving Saturday Nov 28: book the Cabify for 7:00 the night before for the 9:55 Swiss flight. The T-casual card does not work on the airport metro.';
-if(has('match','barça','barca','camp nou','football','soccer'))return 'Match day is Sunday. If it is at Camp Nou, take the blue L5 from Diagonal or Hospital Clínic to Badal or Collblanc (about 15 min). Arrive an hour early and bring only a small bag.';
-if(has('eat','food','restaurant','paella','tapas','lunch','dinner'))return 'Make lunch the big meal: a weekday menú del día is about €12–18 for three courses. Tapas at night in El Born, Gràcia or Sant Antoni. Try seafood paella at Barceloneta, bombas at La Cova Fumada and cheap cava at Can Paixano. Dinner starts late, around 20:30.';
-if(has('rain'))return 'If it rains: keep Montserrat (it runs rain or shine) and move Sagrada Família to the wettest day if your ticket allows. Other indoor options: the Picasso Museum, CosmoCaixa science museum and La Boqueria market.';
-if(has('sunset'))return 'Sunset is around 17:20 in late November. Your plan has the Bunkers del Carmel on Monday at about 16:45. Bring a warm layer; it is windy up there.';
-if(has('metro','bus','transport','get to','how do i get','ticket','t-casual'))return 'Buy one T-casual card each (€13 for 10 rides) at any metro machine. Nearest stations: Provença (FGC, 5 min), Diagonal (L3 green, L5 blue, 10 min) and Hospital Clínic (L5, 7 min). For a specific trip, pick a place in the map panel and tap Public transport.';
-if(has('where','location','address'))return 'Your base is Carrer de Provença 232 in Eixample. Tap “Use my location” to plan from where you are (works when the page is opened from an https:// address).';
-return 'I can help with the places in your plan: Sagrada Família, Park Güell, Montserrat, Picasso, the match, the airport, transport, food, sunset or rain. For anything else, ask Claude.';}
+if(has('near','nearby','around','cerca'))return t('Near Park Güell: the Bunkers del Carmel viewpoint (about 10 min by Cabify) for sunset, and the Gràcia neighbourhood below for cafés and tapas. Near Sagrada Família: Hospital de Sant Pau, 10 minutes up Avinguda de Gaudí. Near the Picasso Museum: Santa Maria del Mar and the El Born tapas streets.','Cerca del Park Güell: el mirador de los Bunkers del Carmel (unos 10 min en Cabify) para el atardecer, y el barrio de Gràcia, más abajo, para cafés y tapas. Cerca de la Sagrada Família: el Hospital de Sant Pau, a 10 minutos subiendo por la Avinguda de Gaudí. Cerca del Museo Picasso: Santa Maria del Mar y las calles de tapas de El Born.');
+if(has('montserrat'))return t('Montserrat is Wednesday. Meet at the Castlexperience office (pink) at Barcelona Nord, Carrer de Nàpols 68, 20 minutes early — about 15 min by Cabify from the apartment. Bring a warm layer and check your voucher for the version, lunch and return time.','Montserrat es el miércoles. Encuentro en la oficina de Castlexperience (rosa) en Barcelona Nord, Carrer de Nàpols 68, 20 minutos antes — unos 15 min en Cabify desde el apartamento. Lleva algo de abrigo y revisa en tu bono la versión, la comida y la hora de regreso.');
+if(has('sagrada'))return t('From the apartment, walk about 10 minutes to Diagonal and take the blue L5 three stops to Sagrada Família (about 10 minutes). Bring your passport: tickets carry your name. Or tap Public transport on the map panel.','Desde el apartamento, camina unos 10 minutos hasta Diagonal y toma la L5 azul tres paradas hasta Sagrada Família (unos 10 minutos). Lleva el pasaporte: las entradas llevan tu nombre. O toca Transporte público en el panel del mapa.');
+if(has('park güell','park guell','guell','güell'))return t('Park Güell is uphill. From Sagrada Família, a Cabify takes about 15 minutes (around €10 for three). Your Monumental Zone slot is timed; in November the last entry is around 17:00.','El Park Güell está cuesta arriba. Desde la Sagrada Família, un Cabify tarda unos 15 minutos (unos 10 € para tres). Tu franja de la Zona Monumental tiene hora; en noviembre la última entrada es hacia las 17:00.');
+if(has('picasso'))return t('Picasso Museum is free on Thursdays after 17:00, but you need a free slot booked online. Slots come out four days ahead, so book on Sunday morning. Without one it costs €14.','El Museo Picasso es gratis los jueves a partir de las 17:00, pero necesitas reservar una franja gratis en línea. Las franjas salen cuatro días antes, así que reserva el domingo por la mañana. Sin ella cuesta 14 €.');
+if(has('airport','flight','cabify','taxi','aeropuerto','vuelo'))return t('Airport: Cabify or FreeNow, about €28–35 for the car, split three ways. Leaving Saturday Nov 28: book the Cabify for 7:00 the night before for the 9:55 Swiss flight. The T-casual card does not work on the airport metro.','Aeropuerto: Cabify o FreeNow, unos 28–35 € por coche, a dividir entre tres. Salida el sábado 28 nov: reserva la noche anterior el Cabify de las 7:00 para el vuelo de Swiss de las 9:55. La tarjeta T-casual no sirve en el metro del aeropuerto.');
+if(has('match','barça','barca','camp nou','football','soccer','partido','fútbol','futbol'))return t('Match day is Sunday. If it is at Camp Nou, take the blue L5 from Diagonal or Hospital Clínic to Badal or Collblanc (about 15 min). Arrive an hour early and bring only a small bag.','El partido es el domingo. Si es en el Camp Nou, toma la L5 azul desde Diagonal u Hospital Clínic hasta Badal o Collblanc (unos 15 min). Llega una hora antes y lleva solo un bolso pequeño.');
+if(has('eat','food','restaurant','paella','tapas','lunch','dinner','comer','comemos','comida','restaurante','cena','almuerzo'))return t('Make lunch the big meal: a weekday menú del día is about €12–18 for three courses. Tapas at night in El Born, Gràcia or Sant Antoni. Try seafood paella at Barceloneta, bombas at La Cova Fumada and cheap cava at Can Paixano. Dinner starts late, around 20:30.','Haz de la comida del mediodía la principal: un menú del día entre semana cuesta unos 12–18 € por tres platos. Tapas por la noche en El Born, Gràcia o Sant Antoni. Prueba la paella de marisco en la Barceloneta, las bombas de La Cova Fumada y el cava barato de Can Paixano. La cena empieza tarde, hacia las 20:30.');
+if(has('rain','lluvia','llueve','llover'))return t('If it rains: keep Montserrat (it runs rain or shine) and move Sagrada Família to the wettest day if your ticket allows. Other indoor options: the Picasso Museum, CosmoCaixa science museum and La Boqueria market.','Si llueve: mantén Montserrat (se hace llueva o no) y pasa la Sagrada Família al día más lluvioso si tu entrada lo permite. Otras opciones bajo techo: el Museo Picasso, el museo de ciencia CosmoCaixa y el mercado de La Boqueria.');
+if(has('sunset','atardecer','puesta de sol'))return t('Sunset is around 17:20 in late November. Your plan has the Bunkers del Carmel on Monday at about 16:45. Bring a warm layer; it is windy up there.','El atardecer es hacia las 17:20 a finales de noviembre. Tu plan incluye los Bunkers del Carmel el lunes hacia las 16:45. Lleva algo de abrigo; arriba hace viento.');
+if(has('metro','bus','transport','get to','how do i get','ticket','t-casual','cómo llego','como llego','billete','autobús'))return t('Buy one T-casual card each (€13 for 10 rides) at any metro machine. Nearest stations: Provença (FGC, 5 min), Diagonal (L3 green, L5 blue, 10 min) and Hospital Clínic (L5, 7 min). For a specific trip, pick a place in the map panel and tap Public transport.','Compra una tarjeta T-casual por persona (13 € por 10 viajes) en cualquier máquina del metro. Estaciones más cercanas: Provença (FGC, 5 min), Diagonal (L3 verde, L5 azul, 10 min) y Hospital Clínic (L5, 7 min). Para un trayecto concreto, elige un lugar en el panel del mapa y toca Transporte público.');
+if(has('where','location','address','dónde','donde','dirección','ubicación'))return t('Your base is Carrer de Provença 232 in Eixample. Tap “Use my location” to plan from where you are (works when the page is opened from an https:// address).','Tu base está en Carrer de Provença 232, en el Eixample. Toca “Usar mi ubicación” para planear desde donde estés (funciona si la página se abre desde una dirección https://).');
+return t('I can help with the places in your plan: Sagrada Família, Park Güell, Montserrat, Picasso, the match, the airport, transport, food, sunset or rain. For anything else, ask Claude.','Puedo ayudarte con los lugares de tu plan: Sagrada Família, Park Güell, Montserrat, Picasso, el partido, el aeropuerto, el transporte, la comida, el atardecer o la lluvia. Para cualquier otra cosa, pregúntale a Claude.');}
 function ask(q){addMsg(q,'you');addMsg(guideAnswer(q),'bot');}
 function sendQuestion(){const e=document.getElementById('question'),q=e.value.trim();if(q){ask(q);e.value='';}}
 
 function renderShops(){const box=document.getElementById('shopList');box.innerHTML=places.filter(p=>p.shop).map(p=>stopCard(p.id)).join('');applyPhotos(box);}
 function focusShops(){if(!map)return;const ps=places.filter(p=>p.shop||p.id==='home');map.fitBounds(L.latLngBounds(ps.map(p=>[p.lat,p.lon])).pad(.2));document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});}
-initMap();renderDays();renderShops();renderTasks();
+function setLang(lang){
+ LANG=lang;const html=document.documentElement;html.dataset.lang=lang;html.lang=lang;
+ document.title=t('Barcelona Local Companion · Nov 2026','Barcelona Local Companion · nov 2026');
+ document.querySelectorAll('.langbar button').forEach(b=>{const on=b.dataset.lang===lang;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});
+ document.getElementById('question').placeholder=t('Ask your guide…','Pregunta a tu guía…');
+ document.querySelectorAll('svg.zimg').forEach(s=>s.setAttribute('aria-label',s.dataset[lang]));
+ try{localStorage.setItem('lang',lang);}catch(e){}
+ // redraw everything that is built by script
+ fillSelect();renderDays();renderShops();renderTasks();
+ if(map)places.forEach(p=>{const m=markers[p.id];m.setPopupContent(popupHtml(p));if(p.id==='home')m.setTooltipContent(t('Your apartment','Tu apartamento'));});
+ if(lastStatus)setStatus(lastStatus);
+}
+initMap();setLang(LANG);
 </script>
 </body></html>
