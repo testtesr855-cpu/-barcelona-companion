@@ -1,7 +1,7 @@
-// Offline support: keeps the page, the Zurich terminal map and its PDF on the phone.
+// Offline support: keeps the page and both Zurich gate maps on the phone.
 // Network first (so updates show up when online), saved copy when offline.
-const CACHE='bcn-companion-v2.6';
-const FILES=['./','index.html','zurich-terminal-map.png','zurich-terminal-map.pdf'];
+const CACHE='bcn-companion-v2.7';
+const FILES=['./','index.html','zurich-gates.png','zurich-return.jpg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{
