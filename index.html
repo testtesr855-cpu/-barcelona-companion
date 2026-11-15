@@ -742,6 +742,11 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
 .ztabs button.active{background:var(--green);color:white}
 .zimg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:14px;cursor:zoom-in;background:#fff}
 .zsteps,.ztips{margin:6px 0 0;padding-left:20px;font-size:13px}.zsteps li,.ztips li{margin:5px 0}
+.zhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.zlang{display:flex;gap:4px}
+.zlang button{padding:6px 12px;font-size:13px;background:#e9ece7;color:#40514b}
+.zlang button.active{background:var(--green);color:white}
+#zurich[data-lang="en"] [lang="es"],#zurich[data-lang="es"] [lang="en"]{display:none}
 </style>
 </head>
 <body>
@@ -791,55 +796,61 @@ body.gopen .topgrid,body.gopen .columns,body.gopen .daygrid{grid-template-column
   </section>
  </div>
 
- <section class="panel" id="zurich" style="margin-top:16px">
-  <div class="pill">CHANGING PLANES</div>
-  <h2 style="margin-top:8px">Zurich Connection</h2>
+ <section class="panel" id="zurich" data-lang="en" style="margin-top:16px">
+  <div class="zhead">
+   <div class="pill"><span lang="en">CHANGING PLANES</span><span lang="es">CAMBIO DE AVIÓN</span></div>
+   <div class="zlang" role="group" aria-label="Language / Idioma">
+    <button class="active" aria-pressed="true" onclick="setZLang('en')">English</button>
+    <button aria-pressed="false" onclick="setZLang('es')">Español</button>
+   </div>
+  </div>
+  <h2 style="margin-top:8px"><span lang="en">Zurich Connection</span><span lang="es">Conexión en Zúrich</span></h2>
   <div class="ztabs" role="tablist">
-   <button class="active" role="tab" aria-selected="true" onclick="showZTab('zGoing',this)">Going (to Barcelona)</button>
-   <button role="tab" aria-selected="false" onclick="showZTab('zReturn',this)">Return (to Montreal)</button>
+   <button class="active" role="tab" aria-selected="true" onclick="showZTab('zGoing',this)"><span lang="en">Going (to Barcelona)</span><span lang="es">Ida (a Barcelona)</span></button>
+   <button role="tab" aria-selected="false" onclick="showZTab('zReturn',this)"><span lang="en">Return (to Montreal)</span><span lang="es">Vuelta (a Montreal)</span></button>
   </div>
   <div id="zGoing" class="zpane">
-   <img class="zimg" src="zurich-gates.png" alt="Zurich gate map, going: Dock E to Gate A or B. Tap to zoom" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
-   <p class="small" style="margin:8px 0 0">Sat Nov 21 · Montreal → Zurich → Barcelona. Tap the map to zoom. Saved on your phone after your first visit, so it works offline.</p>
+   <img class="zimg" src="zurich-gates.png" alt="Zurich gate map, going: Dock E to Gate A or B" data-en="Zurich gate map, going: Dock E to Gate A or B" data-es="Mapa de puertas de Zúrich, ida: del Dock E a la puerta A o B" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
+   <p class="small" style="margin:8px 0 0"><span lang="en">Sat Nov 21 · Montreal → Zurich → Barcelona. Tap the map to zoom. Saved on your phone after your first visit, so it works offline.</span><span lang="es">Sáb 21 nov · Montreal → Zúrich → Barcelona. Toca el mapa para ampliarlo. Se guarda en tu teléfono después de la primera visita, así que funciona sin internet.</span></p>
    <ol class="zsteps">
-    <li><b>Land at Dock E</b>: follow the yellow “Transfer” / “All gates” signs.</li>
-    <li><b>Skymetro</b>: the train runs under the runway (about 3 min), then escalator up.</li>
-    <li><b>Passport control is required here</b>: you're entering Europe (Schengen).</li>
-    <li><b>Gate A or B for Barcelona</b>: check the screens or the Swiss app.</li>
+    <li><span lang="en"><b>Land at Dock E</b>: follow the yellow “Transfer” / “All gates” signs.</span><span lang="es"><b>Aterrizas en el Dock E</b>: sigue los letreros amarillos “Transfer” / “All gates”.</span></li>
+    <li><span lang="en"><b>Skymetro</b>: the train runs under the runway (about 3 min), then escalator up.</span><span lang="es"><b>Skymetro</b>: el tren pasa por debajo de la pista (unos 3 min); luego sube por la escalera mecánica.</span></li>
+    <li><span lang="en"><b>Passport control is required here</b>: you're entering Europe (Schengen).</span><span lang="es"><b>Aquí hay control de pasaportes</b>: estás entrando en Europa (Schengen).</span></li>
+    <li><span lang="en"><b>Gate A or B for Barcelona</b>: check the screens or the Swiss app.</span><span lang="es"><b>Puerta A o B para Barcelona</b>: mira las pantallas o la app de Swiss.</span></li>
    </ol>
    <div class="routebox">
-    <b>Good to know</b>
+    <b><span lang="en">Good to know</span><span lang="es">Para tener en cuenta</span></b>
     <ul class="ztips">
-     <li>Bags are checked through to Barcelona. Don't exit, and ignore the “Exit” signs.</li>
-     <li>Allow 60–90 min for the connection.</li>
-     <li>Barcelona arrival counts as domestic: no customs, just collect your bags and go.</li>
+    <li><span lang="en">Bags are checked through to Barcelona. Don't exit, and ignore the “Exit” signs.</span><span lang="es">Las maletas van facturadas hasta Barcelona. No salgas y no hagas caso a los letreros de “Exit”.</span></li>
+    <li><span lang="en">Allow 60–90 min for the connection.</span><span lang="es">Calcula 60–90 min para la conexión.</span></li>
+    <li><span lang="en">Barcelona arrival counts as domestic: no customs, just collect your bags and go.</span><span lang="es">La llegada a Barcelona cuenta como vuelo nacional: sin aduana, solo recoges tus maletas y listo.</span></li>
     </ul>
    </div>
   </div>
   <div id="zReturn" class="zpane" hidden>
-   <img class="zimg" src="zurich-return.jpg" alt="Zurich gate map, return: Gate A or B to a D or E gate. Tap to zoom" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
-   <p class="small" style="margin:8px 0 0">Sat Nov 28 · Barcelona → Zurich → Montreal. Tap the map to zoom. Works offline.</p>
+   <img class="zimg" src="zurich-return.jpg" alt="Zurich gate map, return: Gate A or B to a D or E gate" data-en="Zurich gate map, return: Gate A or B to a D or E gate" data-es="Mapa de puertas de Zúrich, vuelta: de la puerta A o B a una puerta D o E" role="button" tabindex="0" onclick="openZImg(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openZImg(this);}">
+   <p class="small" style="margin:8px 0 0"><span lang="en">Sat Nov 28 · Barcelona → Zurich → Montreal. Tap the map to zoom. Works offline.</span><span lang="es">Sáb 28 nov · Barcelona → Zúrich → Montreal. Toca el mapa para ampliarlo. Funciona sin internet.</span></p>
    <div class="routebox" style="margin-top:10px">
-    <b>Land Zurich 11:45 (AC 6783) → depart 12:40 (AC 6821). Only 55 min: go straight to your gate.</b>
+    <b><span lang="en">Land Zurich 11:45 (AC 6783) → depart 12:40 (AC 6821). Only 55 min: go straight to your gate.</span><span lang="es">Aterrizas en Zúrich a las 11:45 (AC 6783) → sales a las 12:40 (AC 6821). Solo 55 min: ve directo a tu puerta.</span></b>
    </div>
    <ol class="zsteps">
-    <li><b>No passport control in Barcelona</b>: Barcelona to Zurich stays inside Europe.</li>
-    <li><b>Land at Gate A or B</b>: follow the yellow “Transfer · Gates D, E” signs.</li>
-    <li><b>Passport control in Zurich</b>: you're leaving Europe. This is the line that can slow you down.</li>
-    <li><b>D gate</b> = short walk · <b>E gate</b> = Skymetro (about 10–15 min from passport control).</li>
-    <li><b>Board AC 6821 to Montreal</b>: departs 12:40, boarding around 12:00.</li>
+    <li><span lang="en"><b>No passport control in Barcelona</b>: Barcelona to Zurich stays inside Europe.</span><span lang="es"><b>Sin control de pasaportes en Barcelona</b>: el vuelo de Barcelona a Zúrich no sale de Europa.</span></li>
+    <li><span lang="en"><b>Land at Gate A or B</b>: follow the yellow “Transfer · Gates D, E” signs.</span><span lang="es"><b>Aterrizas en una puerta A o B</b>: sigue los letreros amarillos “Transfer · Gates D, E”.</span></li>
+    <li><span lang="en"><b>Passport control in Zurich</b>: you're leaving Europe. This is the line that can slow you down.</span><span lang="es"><b>Control de pasaportes en Zúrich</b>: estás saliendo de Europa. Esta es la fila que te puede retrasar.</span></li>
+    <li><span lang="en"><b>D gate</b> = short walk · <b>E gate</b> = Skymetro (about 10–15 min from passport control).</span><span lang="es"><b>Puerta D</b> = a pocos pasos · <b>Puerta E</b> = Skymetro (unos 10–15 min desde el control de pasaportes).</span></li>
+    <li><span lang="en"><b>Board AC 6821 to Montreal</b>: departs 12:40, boarding around 12:00.</span><span lang="es"><b>Embarca en el AC 6821 a Montreal</b>: sale a las 12:40, el embarque empieza hacia las 12:00.</span></li>
    </ol>
    <div class="routebox">
-    <b>Good to know</b>
+    <b><span lang="en">Good to know</span><span lang="es">Para tener en cuenta</span></b>
     <ul class="ztips">
-     <li>Bags go through to Montreal. Ignore “Exit” and “Baggage claim”.</li>
-     <li>Get both boarding passes at Barcelona check-in.</li>
-     <li>Missed it? The Swiss Transfer desk rebooks you.</li>
+    <li><span lang="en">Bags go through to Montreal. Ignore “Exit” and “Baggage claim”.</span><span lang="es">Las maletas van directo hasta Montreal. No hagas caso a “Exit” ni a “Baggage claim”.</span></li>
+    <li><span lang="en">Get both boarding passes at Barcelona check-in.</span><span lang="es">Pide las dos tarjetas de embarque al facturar en Barcelona.</span></li>
+    <li><span lang="en">Missed it? The Swiss Transfer desk rebooks you.</span><span lang="es">¿Perdiste el vuelo? El mostrador de Transfer de Swiss te cambia a otro.</span></li>
     </ul>
    </div>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-   <a class="btnlink" href="https://www.flughafen-zuerich.ch/en/passengers/practical/guidance/interactive-map" target="_blank" rel="noopener">Zurich interactive map (online only) ↗</a>
+   <a class="btnlink" href="https://www.flughafen-zuerich.ch/en/passengers/practical/guidance/interactive-map" target="_blank" rel="noopener"><span lang="en">Zurich interactive map (online only) ↗</span><span lang="es">Mapa interactivo de Zúrich (solo con internet) ↗</span></a>
   </div>
  </section>
 
@@ -1014,7 +1025,15 @@ function showZTab(id,btn){
  document.querySelectorAll('.zpane').forEach(p=>p.hidden=p.id!==id);
  document.querySelectorAll('.ztabs button').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-selected',b===btn);});
 }
-function openZImg(img){openPhoto({name:img.alt.replace(/\. Tap to zoom$/,''),noCredit:true},img.getAttribute('src'));}
+function openZImg(img){openPhoto({name:img.alt,noCredit:true},img.getAttribute('src'));}
+// English / Español toggle for the Zurich section; remembers the choice on this phone
+function setZLang(lang){
+ const sec=document.getElementById('zurich');sec.dataset.lang=lang;
+ sec.querySelectorAll('.zlang button').forEach((b,i)=>{const on=(i===0)===(lang==='en');b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});
+ sec.querySelectorAll('.zimg').forEach(img=>img.alt=img.dataset[lang]);
+ try{localStorage.setItem('zLang',lang);}catch(e){}
+}
+try{if(localStorage.getItem('zLang')==='es')setZLang('es');}catch(e){}
 // Save the page and both Zurich gate maps on the phone for offline use (needs the https:// GitHub Pages address)
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 function closePhoto(){
